@@ -12,7 +12,7 @@
     "max-len": ["error", { "code": 100 }],
     "prefer-promise-reject-errors": ["off"],
     "react/jsx-filename-extension": ["off"],
-    "react/jsx-closing-bracket-location": [1, "props-aligned"],
+    "react/jsx-closing-bracket-location": [1, "tag-aligned"],
     "react/prop-types": ["off"],
     "no-return-assign": ["off"],
     "import/no-cycle": ["off"]
