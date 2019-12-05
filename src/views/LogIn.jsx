@@ -3,9 +3,10 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Input, Icon, Button, Text } from "react-native-elements";
 import { Auth } from "../firebase";
 import CenteredView from "../components/CenteredView";
+import { theme } from "../Constants";
 
 const styles = StyleSheet.create({
-  OuterStyle: { backgroundColor: "#FFC107" },
+  OuterStyle: { backgroundColor: theme.colors.secondary },
   InnerStyle: { width: "75%", marginLeft: "12.5%" },
   ButtonStyle: { marginTop: 5 },
   textStyle: {
@@ -24,6 +25,7 @@ class LogIn extends PureComponent {
   render() {
     const { OuterStyle, InnerStyle, ButtonStyle, textStyle } = styles;
     const { email, password } = this.state;
+    const { navigation } = this.props;
     const handleInput = name => {
       return text => {
         this.setState({ [name]: text });
@@ -66,7 +68,7 @@ class LogIn extends PureComponent {
         <Button title="Iniciar Sesion" onPress={handleLogin} containerStyle={ButtonStyle} />
         <TouchableOpacity
           onPress={() => {
-            console.log("wenas");
+            navigation.navigate("SignUp");
           }}>
           <Text style={textStyle}>No tengo cuenta</Text>
         </TouchableOpacity>
