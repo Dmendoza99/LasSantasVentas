@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import "firebase/firestore";
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -12,5 +13,9 @@ if (!firebase.apps.length) {
     measurementId: "G-2SHNN6FSGS",
   });
 }
+
+export const Auth = firebase.auth();
+export const FireStore = firebase.firestore();
+export const Database = firebase.database();
 
 export default firebase;
