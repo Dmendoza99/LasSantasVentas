@@ -3,16 +3,22 @@ import { createAppContainer, createSwitchNavigator, SafeAreaView } from "react-n
 import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
-import { Icon, Avatar } from "react-native-elements";
+import { ThemeProvider, Icon, Avatar } from "react-native-elements";
 import firebase from "./src/firebase";
 import Home from "./src/views/Home";
 import LogIn from "./src/views/LogIn";
 import SignUp from "./src/views/SignUp";
 import UserValidator from "./src/components/UserValidator";
 
+const theme = {};
+
 class App extends PureComponent {
   render() {
-    return <Application />;
+    return (
+      <ThemeProvider theme={theme}>
+        <Application />
+      </ThemeProvider>
+    );
   }
 }
 
