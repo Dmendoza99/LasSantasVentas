@@ -9,8 +9,7 @@ import Home from "./src/views/Home";
 import LogIn from "./src/views/LogIn";
 import SignUp from "./src/views/SignUp";
 import UserValidator from "./src/components/UserValidator";
-
-const theme = {};
+import { theme } from "./src/Constants";
 
 class App extends PureComponent {
   render() {
