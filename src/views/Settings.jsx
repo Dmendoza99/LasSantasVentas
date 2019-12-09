@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Text } from "react-native";
 import CenteredView from "../components/CenteredView";
 
-class Home extends PureComponent {
+class Settings extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -12,10 +12,10 @@ class Home extends PureComponent {
   render() {
     return (
       <CenteredView>
-        <Text>Hello from Home!</Text>
+        <Text>Hello from Settings!</Text>
       </CenteredView>
     );
   }
 }
 
-export default Home;
+export default Settings;
