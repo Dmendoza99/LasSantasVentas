@@ -17,5 +17,6 @@ if (!firebase.apps.length) {
 export const Auth = firebase.auth();
 export const FireStore = firebase.firestore();
 export const Database = firebase.database();
+export const Users = FireStore.collection("Users");
 
 export default firebase;

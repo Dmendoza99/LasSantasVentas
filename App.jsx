@@ -1,12 +1,11 @@
 import React, { PureComponent } from "react";
-import { createAppContainer, createSwitchNavigator, SafeAreaView } from "react-navigation";
-import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
-import { View, ScrollView, Text, StyleSheet } from "react-native";
-import { ThemeProvider, Icon, Avatar } from "react-native-elements";
-import firebase from "./src/firebase";
+import { StyleSheet } from "react-native";
+import { ThemeProvider, Icon } from "react-native-elements";
 import Home from "./src/views/Home";
-import LogIn from "./src/views/LogIn";
+import Login from "./src/views/Login";
 import SignUp from "./src/views/SignUp";
 import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
@@ -56,44 +55,45 @@ const styles = StyleSheet.create({
   },
 });
 
-const drawerContent = props => (
-  <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
-    <View style={styles.drawerHeaderView}>
-      <View style={styles.avatarView}>
-        <Avatar rounded title="E" />
-      </View>
-      <View style={styles.headerInfo}>
-        <Text style={styles.title}>Bienvenido</Text>
-        <Text style={styles.subtitle}>
-          {firebase.auth().currentUser ? firebase.auth().currentUser.displayName : "Nombre"}
-        </Text>
-      </View>
-    </View>
-    <ScrollView>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <DrawerItems {...props} />
-    </ScrollView>
-  </SafeAreaView>
-);
-
-const AppStack = createDrawerNavigator(
+const AppStack = createBottomTabNavigator(
   {
     Home: {
       screen: Home,
       navigationOptions: () => ({
-        title: "Pedir un vehículo",
-        drawerIcon: <Icon name="directions-car" color="#616161" />,
+        tabBarLabel: "Inicio",
+      }),
+    },
+    das: {
+      screen: Home,
+      navigationOptions: () => ({
+        tabBarLabel: "das",
       }),
     },
   },
   {
-    contentComponent: drawerContent,
+    initialRouteName: "Home",
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        if (routeName === "Home") {
+          iconName = "hamburger";
+        } else if (routeName === "das") {
+          iconName = "hamburger";
+        }
+        return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: theme.colors.secondary,
+      inactiveTintColor: theme.colors.grey1,
+    },
   }
 );
 
 const AuthStack = createStackNavigator({
-  LogIn: {
-    screen: LogIn,
+  Login: {
+    screen: Login,
     navigationOptions: {
       header: null,
     },

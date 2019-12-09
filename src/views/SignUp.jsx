@@ -1,9 +1,11 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, Alert } from "react-native";
 import { Input, Button, Icon } from "react-native-elements";
 import { TextInputMask } from "react-native-masked-text";
+import validator from "validator";
 import CenteredView from "../components/CenteredView";
 import { theme } from "../Constants";
+import { Auth, Users } from "../firebase";
 
 const styles = StyleSheet.create({
   OuterStyle: { backgroundColor: theme.colors.secondary },
@@ -27,6 +29,32 @@ class SignUp extends PureComponent {
       return text => {
         this.setState({ [nombre]: text });
       };
+    };
+    const handleSignup = () => {
+      if (
+        validator.isEmpty(email) ||
+        validator.isEmpty(password) ||
+        validator.isEmpty(name) ||
+        validator.isEmpty(id)
+      ) {
+        Alert.alert("Error", "Todos los campos deben estar llenos", [{ text: "Ok" }]);
+        return;
+      }
+
+      if (!validator.matches(id, /\d{4}-\d{4}-\d{5}/)) {
+        Alert.alert("Error", "Esta Identidad parece tener un error", [{ text: "Ok" }]);
+        return;
+      }
+      if (!validator.isEmail(email)) {
+        Alert.alert("Error", "Este correo parece tener un error", [{ text: "Ok" }]);
+      }
+      Auth.createUserWithEmailAndPassword(email, password).then(userData => {
+        userData.user.updateProfile({ displayName: name }).then(() => {
+          Users.add({ email, name, id }).then(value => {
+            Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
+          });
+        });
+      });
     };
 
     return (
@@ -84,7 +112,7 @@ class SignUp extends PureComponent {
           onChangeText={handleInput("password")}
         />
 
-        <Button title="Crear cuenta" containerStyle={ButtonStyle} />
+        <Button title="Crear cuenta" containerStyle={ButtonStyle} onPress={handleSignup} />
       </CenteredView>
     );
   }
