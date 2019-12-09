@@ -2,11 +2,12 @@ import React, { PureComponent } from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
-import { StyleSheet } from "react-native";
 import { ThemeProvider, Icon } from "react-native-elements";
 import Home from "./src/views/Home";
 import Login from "./src/views/Login";
-import SignUp from "./src/views/SignUp";
+import Signup from "./src/views/Signup";
+import Sales from "./src/views/Sales";
+import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
 
@@ -20,53 +21,28 @@ class App extends PureComponent {
   }
 }
 
-const styles = StyleSheet.create({
-  drawerHeaderView: {
-    height: "20%",
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  subtitle: {
-    fontSize: 16,
-  },
-
-  headerInfo: {
-    flex: 3,
-    justifyContent: "center",
-  },
-
-  avatarView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100%",
-    width: "100%",
-  },
-
-  avatar: {
-    height: 25,
-    width: 25,
-  },
-});
+const HomeStack = createStackNavigator({ Home });
+const SalesStack = createStackNavigator({ Sales });
+const SettingsStack = createStackNavigator({ Settings });
 
 const AppStack = createBottomTabNavigator(
   {
     Home: {
-      screen: Home,
+      screen: HomeStack,
       navigationOptions: () => ({
         tabBarLabel: "Inicio",
       }),
     },
-    das: {
-      screen: Home,
+    Sales: {
+      screen: SalesStack,
       navigationOptions: () => ({
-        tabBarLabel: "das",
+        tabBarLabel: "Ventas",
+      }),
+    },
+    Settings: {
+      screen: SettingsStack,
+      navigationOptions: () => ({
+        tabBarLabel: "Opciones",
       }),
     },
   },
@@ -77,16 +53,18 @@ const AppStack = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         if (routeName === "Home") {
+          iconName = "chart-areaspline";
+        } else if (routeName === "Sales") {
           iconName = "hamburger";
-        } else if (routeName === "das") {
-          iconName = "hamburger";
+        } else if (routeName === "Settings") {
+          iconName = "settings";
         }
         return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
       },
     }),
     tabBarOptions: {
       activeTintColor: theme.colors.secondary,
-      inactiveTintColor: theme.colors.grey1,
+      inactiveTintColor: "gray",
     },
   }
 );
@@ -98,13 +76,13 @@ const AuthStack = createStackNavigator({
       header: null,
     },
   },
-  SignUp: {
-    screen: SignUp,
+  Signup: {
+    screen: Signup,
     navigationOptions: {
       header: null,
     },
   },
-  initialRouteName: "SignUp",
+  initialRouteName: "Signup",
 });
 
 const Application = createAppContainer(
