@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   TextStyle: { color: "white", fontWeight: "bold", fontSize: 24 },
 });
 
-class SignUp extends PureComponent {
+class Signup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = { email: "", password: "", name: "", id: "" };
@@ -50,7 +50,7 @@ class SignUp extends PureComponent {
       }
       Auth.createUserWithEmailAndPassword(email, password).then(userData => {
         userData.user.updateProfile({ displayName: name }).then(() => {
-          Users.add({ email, name, id }).then(value => {
+          Users.add({ email, name, id }).then(() => {
             Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
           });
         });
@@ -118,4 +118,4 @@ class SignUp extends PureComponent {
   }
 }
 
-export default SignUp;
+export default Signup;
