@@ -3,8 +3,10 @@
     "name": "Santa Burga",
     "slug": "SantaBurga",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
-    "platforms": ["android"],
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +18,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
-    "androidStatusBar": { "barStyle": "dark-content", "backgroundColor": "#FFC107" }
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#FFC107"
+    }
   }
 }
