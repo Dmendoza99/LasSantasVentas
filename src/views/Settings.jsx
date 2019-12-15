@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
-import { Text } from "react-native";
-import CenteredView from "../components/CenteredView";
+import { FlatList } from "react-native";
+import { ListItem } from "react-native-elements";
+import { Auth } from "../firebase";
 
 class Settings extends PureComponent {
   constructor(props) {
@@ -10,11 +11,29 @@ class Settings extends PureComponent {
   }
 
   render() {
-    return (
-      <CenteredView>
-        <Text>Hello from Settings!</Text>
-      </CenteredView>
+    const list = [
+      {
+        name: "Cerrar sesión",
+        icon: { name: "logout", type: "material-community" },
+        onPress: () => {
+          Auth.signOut();
+        },
+      },
+    ];
+
+    const keyExtractor = (item, index) => index.toString();
+
+    const renderItem = ({ item }) => (
+      <ListItem
+        onPress={item.onPress}
+        title={item.name}
+        subtitle={item.subtitle}
+        rightIcon={item.icon}
+        bottomDivider
+      />
     );
+
+    return <FlatList keyExtractor={keyExtractor} data={list} renderItem={renderItem} />;
   }
 }
 

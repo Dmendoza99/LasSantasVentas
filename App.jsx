@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createAppContainer } from "react-navigation";
+import createAnimatedSwitchNavigator from "react-navigation-animated-switch";
+import { Transition } from "react-native-reanimated";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
 import { ThemeProvider, Icon } from "react-native-elements";
@@ -21,26 +23,22 @@ class App extends PureComponent {
   }
 }
 
-const HomeStack = createStackNavigator({ Home });
-const SalesStack = createStackNavigator({ Sales });
-const SettingsStack = createStackNavigator({ Settings });
-
 const AppStack = createBottomTabNavigator(
   {
     Home: {
-      screen: HomeStack,
+      screen: Home,
       navigationOptions: () => ({
         tabBarLabel: "Inicio",
       }),
     },
     Sales: {
-      screen: SalesStack,
+      screen: Sales,
       navigationOptions: () => ({
         tabBarLabel: "Ventas",
       }),
     },
     Settings: {
-      screen: SettingsStack,
+      screen: Settings,
       navigationOptions: () => ({
         tabBarLabel: "Opciones",
       }),
@@ -49,7 +47,7 @@ const AppStack = createBottomTabNavigator(
   {
     initialRouteName: "Home",
     defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+      tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
         if (routeName === "Home") {
@@ -86,7 +84,7 @@ const AuthStack = createStackNavigator({
 });
 
 const Application = createAppContainer(
-  createSwitchNavigator(
+  createAnimatedSwitchNavigator(
     {
       AuthLoading: UserValidator,
       App: AppStack,
@@ -94,6 +92,12 @@ const Application = createAppContainer(
     },
     {
       initialRouteName: "AuthLoading",
+      transition: (
+        <Transition.Together>
+          <Transition.Out type="slide-bottom" durationMs={400} interpolation="easeIn" />
+          <Transition.In type="slide-top" durationMs={500} />
+        </Transition.Together>
+      ),
     }
   )
 );

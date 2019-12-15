@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { Input, Icon, Button, Text } from "react-native-elements";
 import { Auth } from "../firebase";
-import CenteredView from "../components/CenteredView";
+import CenteredViewKeyboard from "../components/CenteredViewKeyboard";
 import { theme } from "../Constants";
 
 const styles = StyleSheet.create({
@@ -42,7 +42,7 @@ class Login extends PureComponent {
     };
 
     return (
-      <CenteredView OuterStyle={OuterStyle} InnerStyle={InnerStyle}>
+      <CenteredViewKeyboard OuterStyle={OuterStyle} InnerStyle={InnerStyle}>
         <Input
           placeholder="Email"
           label="Email"
@@ -68,11 +68,11 @@ class Login extends PureComponent {
         <Button title="Iniciar Sesion" onPress={handleLogin} containerStyle={ButtonStyle} />
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("SignUp");
+            navigation.navigate("Signup");
           }}>
           <Text style={textStyle}>No tengo cuenta</Text>
         </TouchableOpacity>
-      </CenteredView>
+      </CenteredViewKeyboard>
     );
   }
 }

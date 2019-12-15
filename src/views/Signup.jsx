@@ -3,7 +3,7 @@ import { StyleSheet, Text, Alert } from "react-native";
 import { Input, Button, Icon } from "react-native-elements";
 import { TextInputMask } from "react-native-masked-text";
 import validator from "validator";
-import CenteredView from "../components/CenteredView";
+import CenteredViewKeyboard from "../components/CenteredViewKeyboard";
 import { theme } from "../Constants";
 import { Auth, Users } from "../firebase";
 
@@ -58,7 +58,7 @@ class Signup extends PureComponent {
     };
 
     return (
-      <CenteredView OuterStyle={OuterStyle} InnerStyle={InnerStyle}>
+      <CenteredViewKeyboard OuterStyle={OuterStyle} InnerStyle={InnerStyle}>
         <Text style={TextStyle}>
           Por favor llenar estos datos, para que sepamos que esta pasando.
         </Text>
@@ -113,7 +113,7 @@ class Signup extends PureComponent {
         />
 
         <Button title="Crear cuenta" containerStyle={ButtonStyle} onPress={handleSignup} />
-      </CenteredView>
+      </CenteredViewKeyboard>
     );
   }
 }

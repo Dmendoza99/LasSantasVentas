@@ -16,6 +16,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": ["**/*"],
+    "androidStatusBar": { "barStyle": "dark-content", "backgroundColor": "#FFC107" }
   }
 }
