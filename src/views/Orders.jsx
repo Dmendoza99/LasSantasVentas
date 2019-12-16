@@ -17,18 +17,6 @@ class Orders extends PureComponent {
     const buttons = ["Abiertas", "Cerradas"];
     const { selectedIndex } = this.state;
 
-    const keyExtractor = (item, index) => index.toString();
-
-    const renderItem = ({ item }) => (
-      <ListItem
-        onPress={item.onPress}
-        title={item.name}
-        subtitle={item.date}
-        rightIcon={item.icon}
-        leftElement={<Text>{`L. ${item.total}`}</Text>}
-        bottomDivider
-      />
-    );
     const Ordenes = [];
     return (
       <View>
@@ -38,8 +26,20 @@ class Orders extends PureComponent {
           buttons={buttons}
           containerStyle={{}}
         />
-        {}
-        <FlatList keyExtractor={keyExtractor} data={Ordenes} renderItem={renderItem} />
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={Ordenes}
+          renderItem={item => (
+            <ListItem
+              onPress={item.onPress}
+              title={item.name}
+              subtitle={item.date}
+              rightIcon={item.icon}
+              leftElement={<Text>{`L. ${item.total}`}</Text>}
+              bottomDivider
+            />
+          )}
+        />
       </View>
     );
   }

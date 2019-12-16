@@ -20,20 +20,22 @@ class Settings extends PureComponent {
         },
       },
     ];
-
-    const keyExtractor = (item, index) => index.toString();
-
-    const renderItem = ({ item }) => (
-      <ListItem
-        onPress={item.onPress}
-        title={item.name}
-        subtitle={item.subtitle}
-        rightIcon={item.icon}
-        bottomDivider
+    
+    return (
+      <FlatList
+        keyExtractor={(item, index) => index.toString()}
+        data={list}
+        renderItem={({ item }) => (
+          <ListItem
+            onPress={item.onPress}
+            title={item.name}
+            subtitle={item.subtitle}
+            rightIcon={item.icon}
+            bottomDivider
+          />
+        )}
       />
     );
-
-    return <FlatList keyExtractor={keyExtractor} data={list} renderItem={renderItem} />;
   }
 }
 
