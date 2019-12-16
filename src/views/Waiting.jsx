@@ -7,7 +7,7 @@ class Waiting extends PureComponent {
     return (
       <View
         style={{
-          backgroundColor: theme.colors.primary,
+          backgroundColor: theme.colors.secondary,
           justifyContent: "center",
           alignItems: "center",
           height: Dimensions.get("window").height,
