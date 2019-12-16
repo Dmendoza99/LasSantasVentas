@@ -1,8 +1,11 @@
 import React, { PureComponent } from "react";
-import { Button, Input, ListItem, Image, Avatar } from "react-native-elements";
+import { Button, ListItem, Avatar } from "react-native-elements";
 import { StyleSheet, View, FlatList } from "react-native";
-import burga from "../../assets/photos/food.png";
-import fresco from "../../assets/photos/drink.png";
+import meal from "../../assets/photos/food.png";
+import softdrink from "../../assets/photos/softdrink.png";
+import harddrink from "../../assets/photos/harddrink.png";
+import { theme } from "../Constants";
+import { Menu } from "../firebase";
 
 const styles = StyleSheet.create({
   ParallelButtonContainer: {
@@ -10,10 +13,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    bottom: 2,
+    bottom: 0,
   },
   ButtonContainer: { flex: 1 },
-  searchBar: { marginVertical: 15 },
 });
 
 class Sale extends PureComponent {
@@ -21,35 +23,26 @@ class Sale extends PureComponent {
     super(props);
 
     this.state = {
-      query: "",
-      menu: [
-        { name: "Santa burga", price: 130, count: 0, tipo: "comida" },
-        { name: "Refresco", price: 30, count: 0, tipo: "soda" },
-      ],
+      menu: [],
     };
   }
 
+  componentDidMount = () => {
+    Menu.get().then(querySnap => {
+      const menu = [];
+      querySnap.forEach(doc => {
+        menu.push({ ...doc.data(), count: 0 });
+      });
+      this.setState({ menu });
+    });
+  };
+
   render() {
-    const { query, menu } = this.state;
-    const { ParallelButtonContainer, ButtonContainer, searchBar } = styles;
-    const handleInput = text => {
-      console.log(text);
-    };
+    const { menu } = this.state;
+    const { ParallelButtonContainer, ButtonContainer } = styles;
 
     return (
       <View style={{ flex: 1 }}>
-        <Input
-          placeholder="Busqueda"
-          rightIcon={{
-            name: "magnify",
-            type: "material-community",
-            size: 24,
-            color: "gray",
-          }}
-          value={query}
-          containerStyle={searchBar}
-          onChangeText={handleInput}
-        />
         <View style={{ flex: 1 }}>
           <FlatList
             keyExtractor={(item, index) => index.toString()}
@@ -62,21 +55,45 @@ class Sale extends PureComponent {
                   type: "material-community",
                   reverse: true,
                   reverseColor: "white",
-                  color: "#FFC107",
+                  color: theme.colors.secondary,
                   size: 20,
-                  onPress: () => {},
+                  onPress: () => {
+                    this.setState({
+                      menu: menu.map((food, i) => ({
+                        ...food,
+                        count: food === item && food.count > 0 ? food.count - 1 : food.count,
+                      })),
+                    });
+                  },
                 }}
                 rightIcon={{
                   name: "plus",
                   type: "material-community",
                   reverse: true,
                   reverseColor: "white",
-                  color: "#FFC107",
+                  color: theme.colors.secondary,
                   size: 20,
-                  onPress: () => {},
+                  onPress: () => {
+                    this.setState({
+                      menu: menu.map((food, i) => ({
+                        ...food,
+                        count: food === item ? food.count + 1 : food.count,
+                      })),
+                    });
+                  },
                 }}
-                rightTitle="0"
-                leftAvatar={<Avatar source={item.tipo === "comida" ? burga : fresco} size="medium" />}
+                rightTitle={`${item.count}`}
+                leftAvatar={() => {
+                  let source;
+                  if (item.type === "food") {
+                    source = meal;
+                  } else if (item.type === "softdrink") {
+                    source = softdrink;
+                  } else if (item.type === "harddrink") {
+                    source = harddrink;
+                  }
+                  return <Avatar source={source} size="medium" />;
+                }}
                 subtitle={`L. ${item.price}`}
                 bottomDivider
               />
@@ -84,7 +101,14 @@ class Sale extends PureComponent {
           />
         </View>
         <View style={ParallelButtonContainer}>
-          <Button title="OK" containerStyle={ButtonContainer} />
+          <Button
+            title="OK"
+            containerStyle={ButtonContainer}
+            onPress={() => {
+              const order = menu.filter(value => value.count > 0);
+              console.log(order);
+            }}
+          />
           <Button title="Cancelar" containerStyle={ButtonContainer} />
         </View>
       </View>
