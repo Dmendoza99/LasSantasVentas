@@ -22,7 +22,7 @@
       "**/*"
     ],
     "androidStatusBar": {
-      "barStyle": "dark-content",
+      "barStyle": "light-content",
       "backgroundColor": "#FFC107"
     }
   }
