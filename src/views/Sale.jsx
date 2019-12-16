@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
-import { Text } from "react-native";
+import { Text } from "react-native-elements";
 import CenteredView from "../components/CenteredView";
 
-class Sales extends PureComponent {
+class Sale extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -12,10 +12,10 @@ class Sales extends PureComponent {
   render() {
     return (
       <CenteredView>
-        <Text>Hello from Sales!</Text>
+        <Text>Hello from Sale!</Text>
       </CenteredView>
     );
   }
 }
 
-export default Sales;
+export default Sale;

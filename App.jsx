@@ -8,7 +8,8 @@ import { ThemeProvider, Icon } from "react-native-elements";
 import Home from "./src/views/Home";
 import Login from "./src/views/Login";
 import Signup from "./src/views/Signup";
-import Sales from "./src/views/Sales";
+import Orders from "./src/views/Orders";
+import Sale from "./src/views/Sale";
 import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
@@ -31,10 +32,16 @@ const AppStack = createBottomTabNavigator(
         tabBarLabel: "Inicio",
       }),
     },
-    Sales: {
-      screen: Sales,
+    Orders: {
+      screen: Orders,
       navigationOptions: () => ({
-        tabBarLabel: "Ventas",
+        tabBarLabel: "Ordenes",
+      }),
+    },
+    Sale: {
+      screen: Sale,
+      navigationOptions: () => ({
+        tabBarLabel: "Vender",
       }),
     },
     Settings: {
@@ -50,12 +57,21 @@ const AppStack = createBottomTabNavigator(
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
-        if (routeName === "Home") {
-          iconName = "chart-areaspline";
-        } else if (routeName === "Sales") {
-          iconName = "hamburger";
-        } else if (routeName === "Settings") {
-          iconName = "settings";
+        switch (routeName) {
+          case "Home":
+            iconName = "chart-areaspline";
+            break;
+          case "Orders":
+            iconName = "hamburger";
+            break;
+          case "Sale":
+            iconName = "cash";
+            break;
+          case "Settings":
+            iconName = "settings";
+            break;
+          default:
+            break;
         }
         return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
       },
