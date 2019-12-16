@@ -10,17 +10,17 @@ This project exists because of the need of cheap open source solutions in Hondur
 
 ## Code style
 
-    - babel-eslint
-    - babel-preset-expo
-    - eslint
-    - eslint-config-airbnb
-    - eslint-config-prettier
-    - eslint-plugin-import
-    - eslint-plugin-jsx-a11y
-    - eslint-plugin-prettier
-    - eslint-plugin-react
-    - prettier
-    - pretty-quick
+- babel-eslint
+- babel-preset-expo
+- eslint
+- eslint-config-airbnb
+- eslint-config-prettier
+- eslint-plugin-import
+- eslint-plugin-jsx-a11y
+- eslint-plugin-prettier
+- eslint-plugin-react
+- prettier
+- pretty-quick
 
 ### .eslintrc
 
