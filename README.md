@@ -1,4 +1,4 @@
-# SantaBurga made with :heart:,:hamburger:, ☕ and some 🍺
+# SantaBurga made with :heart:, :hamburger:, :coffee: and some :beer:
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/Dmendoza99/SantaBurga) ![License](https://img.shields.io/github/license/Dmendoza99/SantaBurga.svg) ![Issues](https://img.shields.io/github/issues/Dmendoza99/SantaBurga.svg)
 
@@ -10,26 +10,46 @@ This project exists because of the need of cheap open source solutions in Hondur
 
 ## Code style
 
-I'm using just using [Expo's](https://github.com/expo) eslint-config-universe for linting and prettier for style.
+    - babel-eslint
+    - babel-preset-expo
+    - eslint
+    - eslint-config-airbnb
+    - eslint-config-prettier
+    - eslint-plugin-import
+    - eslint-plugin-jsx-a11y
+    - eslint-plugin-prettier
+    - eslint-plugin-react
+    - prettier
+    - pretty-quick
 
-![Style](https://img.shields.io/badge/Coding_Style-eslint--config--unverse-blue.svg)
-
-### Eslint
-
-```js
-This is the .eslintrc.js
-module.exports = {
-  extends: ["universe/web", "prettier"],
-  parserOptions: {
-    es6: true,
-  },
-};
-```
-
-### Prettier
+### .eslintrc
 
 ```json
-this is the .prettierrc
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "codeFrame": false
+  },
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["react", "prettier"],
+  "env": { "browser": true, "jest": true },
+  "rules": {
+    "max-len": ["error", { "code": 100 }],
+    "prefer-promise-reject-errors": ["off"],
+    "react/jsx-filename-extension": ["off"],
+    "react/jsx-closing-bracket-location": [1, "tag-aligned"],
+    "react/prop-types": ["off"],
+    "no-return-assign": ["off"],
+    "import/no-cycle": ["off"]
+  }
+}
+```
+
+### .prettierrc
+
+```json
 {
   "printWidth": 100,
   "tabWidth": 2,
@@ -38,13 +58,6 @@ this is the .prettierrc
   "trailingComma": "es5"
 }
 ```
-
-## Tech/framework used
-
-### Dependecies
-
-- Expo
-- Firebase
 
 ## Installation
 
