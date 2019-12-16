@@ -1,19 +1,14 @@
 import React, { PureComponent } from "react";
-import { Text, Dimensions, StyleSheet, ScrollView } from "react-native";
+import { Dimensions, StyleSheet, ScrollView } from "react-native";
+import { Text } from "react-native-elements";
 import { BarChart } from "react-native-chart-kit";
 
 const style = StyleSheet.create({
-  title: { fontWeight: "bold", fontSize: 20, textAlign: "left", margin: 10 },
   chart: {
     marginVertical: 8,
     marginHorizontal: 50,
     borderRadius: 16,
     alignSelf: "center",
-  },
-  subtitle: {
-    fontSize: 10,
-    textAlign: "left",
-    marginLeft: 10,
   },
 });
 
@@ -25,11 +20,11 @@ class Home extends PureComponent {
   }
 
   render() {
-    const { title, chart, subtitle } = style;
+    const { chart } = style;
     return (
       <ScrollView>
-        <Text style={title}>¡Ventas de la semana!</Text>
-        <Text style={subtitle}>En lempiras</Text>
+        <Text h4>¡Ventas de la semana!</Text>
+        <Text h6>En lempiras</Text>
         <BarChart
           fromZero
           data={{
@@ -54,8 +49,8 @@ class Home extends PureComponent {
           }}
           style={chart}
         />
-        <Text style={title}>¡Ventas del mes!</Text>
-        <Text style={subtitle}>En lempiras</Text>
+        <Text h4>¡Ventas del mes!</Text>
+        <Text h6>En lempiras</Text>
         <BarChart
           fromZero
           data={{

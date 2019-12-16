@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Input, Icon, Button, Text } from "react-native-elements";
 import { Auth } from "../firebase";
 import CenteredViewKeyboard from "../components/CenteredViewKeyboard";

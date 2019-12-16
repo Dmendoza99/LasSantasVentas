@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, Text, Alert } from "react-native";
-import { Input, Button, Icon } from "react-native-elements";
+import { StyleSheet, Alert } from "react-native";
+import { Input, Button, Text, Icon } from "react-native-elements";
 import { TextInputMask } from "react-native-masked-text";
 import validator from "validator";
 import CenteredViewKeyboard from "../components/CenteredViewKeyboard";
@@ -24,7 +24,7 @@ class Signup extends PureComponent {
 
   render() {
     const { email, password, name, id } = this.state;
-    const { OuterStyle, InnerStyle, ButtonStyle, InputStyle, IconStyle, TextStyle } = styles;
+    const { OuterStyle, InnerStyle, ButtonStyle, InputStyle, IconStyle } = styles;
     const handleInput = nombre => {
       return text => {
         this.setState({ [nombre]: text });
@@ -59,8 +59,8 @@ class Signup extends PureComponent {
 
     return (
       <CenteredViewKeyboard OuterStyle={OuterStyle} InnerStyle={InnerStyle}>
-        <Text style={TextStyle}>
-          Por favor llenar estos datos, para que sepamos que esta pasando.
+        <Text h4 style={{ color: "white" }}>
+          Por favor llenar estos datos, para crear una cuenta.
         </Text>
         <Input
           placeholder="Nombre"
