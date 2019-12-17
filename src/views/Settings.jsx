@@ -27,24 +27,13 @@ class Settings extends PureComponent {
         },
       },
       {
-        name: "Editar Productos",
-        icon: { name: "pencil", type: "material-community" },
+        name: "Editar y Eliminar",
+        icon: { name: "format-list-bulleted", type: "material-community" },
         onPress: () => {
           navigation.navigate(
             "Settings",
             {},
-            NavigationActions.navigate({ routeName: "EditProducts" })
-          );
-        },
-      },
-      {
-        name: "Eliminar Productos",
-        icon: { name: "delete", type: "material-community" },
-        onPress: () => {
-          navigation.navigate(
-            "Settings",
-            {},
-            NavigationActions.navigate({ routeName: "EliminateProducts" })
+            NavigationActions.navigate({ routeName: "ListProducts" })
           );
         },
       },

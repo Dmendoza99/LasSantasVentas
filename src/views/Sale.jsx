@@ -15,10 +15,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 0,
   },
   ButtonContainer: { flex: 1 },
+  flatlistContainer: { flex: 6 },
 });
 
 class Sale extends PureComponent {
@@ -33,9 +32,10 @@ class Sale extends PureComponent {
       update: false,
       updatekey: "",
     };
+    this.getAllProducts();
   }
 
-  componentDidMount = () => {
+  getAllProducts = () => {
     Products.get().then(querySnap => {
       const products = [];
       querySnap.forEach(doc => {
@@ -54,6 +54,7 @@ class Sale extends PureComponent {
         const selected = [...Object.values(selectedOrder.items)];
         let productos = products;
         selected.map(selc => (productos = productos.filter(value => value.id !== selc.id)));
+        // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
           comment: selectedOrder.comment,
           products: [...productos, ...selected],
@@ -66,11 +67,11 @@ class Sale extends PureComponent {
 
   render() {
     const { products, comment, showComment, backupProducts, update, updatekey } = this.state;
-    const { ParallelButtonContainer, ButtonContainer } = styles;
+    const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
+        <View style={flatlistContainer}>
           {products.length > 0 ? (
             <FlatList
               keyExtractor={(item, index) => index.toString()}
@@ -158,20 +159,22 @@ class Sale extends PureComponent {
             onChangeText={text => this.setState({ comment: text })}
             multiline
           />
-          <Button
-            title="OK"
-            containerStyle={{ paddingVertical: 5 }}
-            onPress={() => {
-              this.setState({ showComment: false });
-            }}
-          />
-          <Button
-            title="Cancelar"
-            containerStyle={{ paddingVertical: 5 }}
-            onPress={() => {
-              this.setState({ comment: "", showComment: false });
-            }}
-          />
+          <View style={{ flexDirection: "row", paddingTop: 5 }}>
+            <Button
+              title="OK"
+              containerStyle={{ paddingHorizontal: 2, flex: 1 }}
+              onPress={() => {
+                this.setState({ showComment: false });
+              }}
+            />
+            <Button
+              title="Cancelar"
+              containerStyle={{ paddingHorizontal: 2, flex: 1 }}
+              onPress={() => {
+                this.setState({ comment: "", showComment: false });
+              }}
+            />
+          </View>
         </Overlay>
         <View style={ParallelButtonContainer}>
           <Button
@@ -212,7 +215,7 @@ class Sale extends PureComponent {
                       },
                     },
                     {
-                      text: "Cancel",
+                      text: "Cancelar",
                     },
                   ],
                   { cancelable: false }
@@ -249,7 +252,7 @@ class Sale extends PureComponent {
                     ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);
                   },
                 },
-                { text: "Cancel" },
+                { text: "Cancelar" },
               ]);
             }}
           />

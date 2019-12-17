@@ -10,6 +10,7 @@ import Login from "./src/views/Login";
 import Signup from "./src/views/Signup";
 import Orders from "./src/views/Orders";
 import CreateProducts from "./src/views/CreateProducts";
+import ListProducts from "./src/views/ListProducts";
 import EditProducts from "./src/views/EditProducts";
 import EliminateProducts from "./src/views/EliminateProducts";
 import Sale from "./src/views/Sale";
@@ -31,6 +32,9 @@ const settingStack = createStackNavigator(
   {
     Inicio: {
       screen: Settings,
+    },
+    ListProducts: {
+      screen: ListProducts,
     },
     CreateProducts: {
       screen: CreateProducts,

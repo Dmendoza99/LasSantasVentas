@@ -16,8 +16,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 0,
   },
   fullSize: { flex: 1 },
 });
@@ -33,9 +31,6 @@ class Orders extends PureComponent {
       selectedOrder: null,
       showOrder: false,
     };
-  }
-
-  componentDidMount = () => {
     OrdersDB.on("value", data => {
       const all = data.toJSON();
       const orders = [];
@@ -47,7 +42,7 @@ class Orders extends PureComponent {
         ),
       }));
     });
-  };
+  }
 
   componentWillUnmount = () => {
     OrdersDB.off("value");
@@ -84,6 +79,7 @@ class Orders extends PureComponent {
               return (
                 <ListItem
                   title={`Orden ${item.key}`}
+                  // eslint-disable-next-line max-len
                   subtitle={`${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
                   leftIcon={
                     selectedIndex === 0
@@ -113,7 +109,7 @@ class Orders extends PureComponent {
                                   },
                                 },
                                 {
-                                  text: "Cancel",
+                                  text: "Cancelar",
                                 },
                               ],
                               { cancelable: false }
@@ -124,7 +120,7 @@ class Orders extends PureComponent {
                   }
                   rightElement={<Text>{`L. ${total.toFixed(2)}`}</Text>}
                   bottomDivider
-                  onLongPress={() => {
+                  onPress={() => {
                     this.setState({ showOrder: true, selectedOrder: item });
                   }}
                 />
@@ -158,41 +154,43 @@ class Orders extends PureComponent {
           overlayStyle={zeroPadding}>
           {selectedOrder !== null ? (
             <View style={{ flex: 1 }}>
-              <FlatList
-                keyExtractor={(item, index) => index.toString()}
-                data={Object.values(selectedOrder.items)}
-                renderItem={({ item }) => {
-                  return (
-                    <ListItem
-                      title={item.name}
-                      rightTitle={`${item.count}`}
-                      leftAvatar={() => {
-                        let source;
-                        if (item.categorie === 0) {
-                          source = meal;
-                        } else if (item.categorie === 1) {
-                          source = softdrink;
-                        } else if (item.categorie === 2) {
-                          source = harddrink;
-                        } else if (item.categorie === 3) {
-                          source = hotdrink;
-                        } else if (item.categorie === 4) {
-                          source = dessert;
-                        }
-                        return (
-                          <Avatar
-                            source={source}
-                            overlayContainerStyle={{ backgroundColor: "white" }}
-                            size="medium"
-                          />
-                        );
-                      }}
-                      subtitle={`L. ${item.price.toFixed(2)}`}
-                      bottomDivider
-                    />
-                  );
-                }}
-              />
+              <View style={{ flex: 6 }}>
+                <FlatList
+                  keyExtractor={(item, index) => index.toString()}
+                  data={Object.values(selectedOrder.items)}
+                  renderItem={({ item }) => {
+                    return (
+                      <ListItem
+                        title={item.name}
+                        rightTitle={`${item.count}`}
+                        leftAvatar={() => {
+                          let source;
+                          if (item.categorie === 0) {
+                            source = meal;
+                          } else if (item.categorie === 1) {
+                            source = softdrink;
+                          } else if (item.categorie === 2) {
+                            source = harddrink;
+                          } else if (item.categorie === 3) {
+                            source = hotdrink;
+                          } else if (item.categorie === 4) {
+                            source = dessert;
+                          }
+                          return (
+                            <Avatar
+                              source={source}
+                              overlayContainerStyle={{ backgroundColor: "white" }}
+                              size="medium"
+                            />
+                          );
+                        }}
+                        subtitle={`L. ${item.price.toFixed(2)}`}
+                        bottomDivider
+                      />
+                    );
+                  }}
+                />
+              </View>
               <View style={containerBottom}>
                 {selectedOrder.active ? (
                   <Button
