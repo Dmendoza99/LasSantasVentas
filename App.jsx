@@ -9,6 +9,9 @@ import Home from "./src/views/Home";
 import Login from "./src/views/Login";
 import Signup from "./src/views/Signup";
 import Orders from "./src/views/Orders";
+import CreateProducts from "./src/views/CreateProducts";
+import EditProducts from "./src/views/EditProducts";
+import EliminateProducts from "./src/views/EliminateProducts";
 import Sale from "./src/views/Sale";
 import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
@@ -23,6 +26,24 @@ class App extends PureComponent {
     );
   }
 }
+
+const settingStack = createStackNavigator(
+  {
+    Inicio: {
+      screen: Settings,
+    },
+    CreateProducts: {
+      screen: CreateProducts,
+    },
+    EditProducts: {
+      screen: EditProducts,
+    },
+    EliminateProducts: {
+      screen: EliminateProducts,
+    },
+  },
+  { headerMode: "none" }
+);
 
 const AppStack = createBottomTabNavigator(
   {
@@ -45,7 +66,7 @@ const AppStack = createBottomTabNavigator(
       }),
     },
     Settings: {
-      screen: Settings,
+      screen: settingStack,
       navigationOptions: () => ({
         tabBarLabel: "Opciones",
       }),

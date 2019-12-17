@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
+import { NavigationActions } from "react-navigation";
 import { Auth } from "../firebase";
 
 class Settings extends PureComponent {
@@ -11,21 +12,41 @@ class Settings extends PureComponent {
   }
 
   render() {
+    const { navigation } = this.props;
+
     const list = [
       {
         name: "Crear Productos",
         icon: { name: "plus", type: "material-community" },
-        onPress: () => {},
+        onPress: () => {
+          navigation.navigate(
+            "Settings",
+            {},
+            NavigationActions.navigate({ routeName: "CreateProducts" })
+          );
+        },
       },
       {
         name: "Editar Productos",
         icon: { name: "pencil", type: "material-community" },
-        onPress: () => {},
+        onPress: () => {
+          navigation.navigate(
+            "Settings",
+            {},
+            NavigationActions.navigate({ routeName: "EditProducts" })
+          );
+        },
       },
       {
         name: "Eliminar Productos",
         icon: { name: "delete", type: "material-community" },
-        onPress: () => {},
+        onPress: () => {
+          navigation.navigate(
+            "Settings",
+            {},
+            NavigationActions.navigate({ routeName: "EliminateProducts" })
+          );
+        },
       },
       {
         name: "Cerrar sesión",
