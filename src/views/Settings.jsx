@@ -13,6 +13,21 @@ class Settings extends PureComponent {
   render() {
     const list = [
       {
+        name: "Crear Productos",
+        icon: { name: "plus", type: "material-community" },
+        onPress: () => {},
+      },
+      {
+        name: "Editar Productos",
+        icon: { name: "pencil", type: "material-community" },
+        onPress: () => {},
+      },
+      {
+        name: "Eliminar Productos",
+        icon: { name: "delete", type: "material-community" },
+        onPress: () => {},
+      },
+      {
         name: "Cerrar sesión",
         icon: { name: "logout", type: "material-community" },
         onPress: () => {
@@ -20,7 +35,7 @@ class Settings extends PureComponent {
         },
       },
     ];
-    
+
     return (
       <FlatList
         keyExtractor={(item, index) => index.toString()}
