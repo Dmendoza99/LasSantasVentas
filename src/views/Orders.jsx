@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { ButtonGroup, ListItem, Text, Overlay, Button, Avatar } from "react-native-elements";
-import { View, FlatList, ActivityIndicator, ToastAndroid, Alert } from "react-native";
+import { View, FlatList, ActivityIndicator, ToastAndroid, Alert, StyleSheet } from "react-native";
 import { Orders as OrdersDB } from "../firebase";
 import { theme } from "../Constants";
 import meal from "../../assets/photos/food.png";
@@ -8,6 +8,19 @@ import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
 import hotdrink from "../../assets/photos/hotdrink.png";
 import dessert from "../../assets/photos/dessert.png";
+
+const styles = StyleSheet.create({
+  centeredText: { textAlign: "center" },
+  zeroPadding: { padding: 0 },
+  containerBottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 0,
+  },
+  fullSize: { flex: 1 },
+});
 
 class Orders extends PureComponent {
   constructor(props) {
@@ -53,15 +66,11 @@ class Orders extends PureComponent {
     const buttons = ["Abiertas", "Cerradas"];
     const { selectedIndex, filterredOrders, orders, selectedOrder, showOrder } = this.state;
     const { navigation } = this.props;
+    const { centeredText, zeroPadding, containerBottom, fullSize } = styles;
 
     return (
       <View>
-        <ButtonGroup
-          onPress={updateIndex}
-          selectedIndex={selectedIndex}
-          buttons={buttons}
-          containerStyle={{}}
-        />
+        <ButtonGroup onPress={updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
         {filterredOrders.length > 0 ? (
           <FlatList
             keyExtractor={(item, index) => index.toString()}
@@ -126,14 +135,14 @@ class Orders extends PureComponent {
           <View>
             {orders.length <= 0 ? (
               <View>
-                <Text h3 style={{ textAlign: "center" }}>
+                <Text h3 style={centeredText}>
                   Los datos estan cargando...
                 </Text>
                 <ActivityIndicator size={60} color={theme.colors.secondary} />
               </View>
             ) : (
               <View>
-                <Text h3 style={{ textAlign: "center" }}>
+                <Text h3 style={centeredText}>
                   Parece que no hay ordenes
                   {selectedIndex === 0 ? " abiertas" : " cerradas"}
                 </Text>
@@ -146,7 +155,7 @@ class Orders extends PureComponent {
           onBackdropPress={() => {
             this.setState({ showOrder: false });
           }}
-          overlayStyle={{ padding: 0 }}>
+          overlayStyle={zeroPadding}>
           {selectedOrder !== null ? (
             <View style={{ flex: 1 }}>
               <FlatList
@@ -184,18 +193,11 @@ class Orders extends PureComponent {
                   );
                 }}
               />
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "absolute",
-                  bottom: 0,
-                }}>
+              <View style={containerBottom}>
                 {selectedOrder.active ? (
                   <Button
                     title="Editar"
-                    containerStyle={{ flex: 1 }}
+                    containerStyle={fullSize}
                     onPress={() => {
                       this.setState({ showOrder: false });
                       navigation.navigate("Sale", { selectedOrder });
