@@ -1,14 +1,25 @@
 import React, { PureComponent } from "react";
-import { ButtonGroup, ListItem, Text } from "react-native-elements";
+import { ButtonGroup, ListItem, Text, Overlay, Button, Avatar } from "react-native-elements";
 import { View, FlatList, ActivityIndicator, ToastAndroid, Alert } from "react-native";
 import { Orders as OrdersDB } from "../firebase";
 import { theme } from "../Constants";
+import meal from "../../assets/photos/food.png";
+import softdrink from "../../assets/photos/softdrink.png";
+import harddrink from "../../assets/photos/harddrink.png";
+import hotdrink from "../../assets/photos/hotdrink.png";
+import dessert from "../../assets/photos/dessert.png";
 
 class Orders extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { selectedIndex: 0, orders: [], filterredOrders: [] };
+    this.state = {
+      selectedIndex: 0,
+      orders: [],
+      filterredOrders: [],
+      selectedOrder: null,
+      showOrder: false,
+    };
   }
 
   componentDidMount = () => {
@@ -40,7 +51,8 @@ class Orders extends PureComponent {
     };
 
     const buttons = ["Abiertas", "Cerradas"];
-    const { selectedIndex, filterredOrders, orders } = this.state;
+    const { selectedIndex, filterredOrders, orders, selectedOrder, showOrder } = this.state;
+    const { navigation } = this.props;
 
     return (
       <View>
@@ -103,6 +115,9 @@ class Orders extends PureComponent {
                   }
                   rightElement={<Text>{`L. ${total.toFixed(2)}`}</Text>}
                   bottomDivider
+                  onLongPress={() => {
+                    this.setState({ showOrder: true, selectedOrder: item });
+                  }}
                 />
               );
             }}
@@ -126,6 +141,71 @@ class Orders extends PureComponent {
             )}
           </View>
         )}
+        <Overlay
+          isVisible={showOrder}
+          onBackdropPress={() => {
+            this.setState({ showOrder: false });
+          }}
+          overlayStyle={{ padding: 0 }}>
+          {selectedOrder !== null ? (
+            <View style={{ flex: 1 }}>
+              <FlatList
+                keyExtractor={(item, index) => index.toString()}
+                data={Object.values(selectedOrder.items)}
+                renderItem={({ item }) => {
+                  return (
+                    <ListItem
+                      title={item.name}
+                      rightTitle={`${item.count}`}
+                      leftAvatar={() => {
+                        let source;
+                        if (item.categorie === 0) {
+                          source = meal;
+                        } else if (item.categorie === 1) {
+                          source = softdrink;
+                        } else if (item.categorie === 2) {
+                          source = harddrink;
+                        } else if (item.categorie === 3) {
+                          source = hotdrink;
+                        } else if (item.categorie === 4) {
+                          source = dessert;
+                        }
+                        return (
+                          <Avatar
+                            source={source}
+                            overlayContainerStyle={{ backgroundColor: "white" }}
+                            size="medium"
+                          />
+                        );
+                      }}
+                      subtitle={`L. ${item.price.toFixed(2)}`}
+                      bottomDivider
+                    />
+                  );
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "absolute",
+                  bottom: 0,
+                }}>
+                {selectedOrder.active ? (
+                  <Button
+                    title="Editar"
+                    containerStyle={{ flex: 1 }}
+                    onPress={() => {
+                      this.setState({ showOrder: false });
+                      navigation.navigate("Sale", { selectedOrder });
+                    }}
+                  />
+                ) : null}
+              </View>
+            </View>
+          ) : null}
+        </Overlay>
       </View>
     );
   }

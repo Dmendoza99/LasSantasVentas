@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { Button, ListItem, Avatar, Text, Input, Overlay } from "react-native-elements";
 import { StyleSheet, View, FlatList, ActivityIndicator, Alert, ToastAndroid } from "react-native";
+import { withNavigationFocus } from "react-navigation";
 import meal from "../../assets/photos/food.png";
 import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
@@ -29,6 +30,8 @@ class Sale extends PureComponent {
       backupProducts: [],
       comment: "",
       showComment: false,
+      update: false,
+      updatekey: "",
     };
   }
 
@@ -36,16 +39,35 @@ class Sale extends PureComponent {
     Products.get().then(querySnap => {
       const products = [];
       querySnap.forEach(doc => {
-        products.push({ ...doc.data(), count: 0 });
+        products.push({ ...doc.data(), count: 0, id: doc.id });
       });
       this.setState({ products, backupProducts: products });
     });
   };
 
-  render() {
-    const { products, comment, showComment, backupProducts } = this.state;
-    const { ParallelButtonContainer, ButtonContainer } = styles;
+  componentDidUpdate = prevProps => {
+    const { isFocused, navigation } = this.props;
+    if (prevProps.isFocused === false && isFocused) {
+      const { products } = this.state;
+      const selectedOrder = navigation.getParam("selectedOrder", "shit");
+      if (selectedOrder !== "shit") {
+        const selected = [...Object.values(selectedOrder.items)];
+        let productos = products;
+        selected.map(selc => (productos = productos.filter(value => value.id !== selc.id)));
+        this.setState({
+          comment: selectedOrder.comment,
+          products: [...productos, ...selected],
+          update: true,
+          updatekey: selectedOrder.key,
+        });
+      }
+    }
+  };
 
+  render() {
+    const { products, comment, showComment, backupProducts, update, updatekey } = this.state;
+    const { ParallelButtonContainer, ButtonContainer } = styles;
+    const { navigation } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
@@ -159,6 +181,7 @@ class Sale extends PureComponent {
               const items = products.filter(value => value.count > 0);
               if (items.length > 0) {
                 const order = { items, comment, active: true, date: new Date().getTime() };
+
                 Alert.alert(
                   "Confirmacion",
                   "Seguro queres publicar esta orden?",
@@ -166,12 +189,26 @@ class Sale extends PureComponent {
                     {
                       text: "OK",
                       onPress: () => {
-                        Orders.push(order).then(() => {
-                          ToastAndroid.show(
-                            "La orden se ha publicado con exito",
-                            ToastAndroid.SHORT
-                          );
-                        });
+                        if (update) {
+                          delete order.date;
+                          Orders.child(updatekey)
+                            .update({ ...order })
+                            .then(() => {
+                              this.setState({ update: false, updatekey: "" });
+                              navigation.setParams({ selectedOrder: "shit" });
+                              ToastAndroid.show(
+                                "La orden se ha actualizado con exito",
+                                ToastAndroid.SHORT
+                              );
+                            });
+                        } else {
+                          Orders.push(order).then(() => {
+                            ToastAndroid.show(
+                              "La orden se ha publicado con exito",
+                              ToastAndroid.SHORT
+                            );
+                          });
+                        }
                       },
                     },
                     {
@@ -198,7 +235,22 @@ class Sale extends PureComponent {
             title="Cancelar"
             containerStyle={ButtonContainer}
             onPress={() => {
-              this.setState({ products: backupProducts, comment: "" });
+              Alert.alert("Confirmacion", "Seguro queres cancelar la orden?", [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    this.setState({
+                      products: backupProducts,
+                      comment: "",
+                      update: false,
+                      updatekey: "",
+                    });
+                    navigation.setParams({ selectedOrder: "shit" });
+                    ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);
+                  },
+                },
+                { text: "Cancel" },
+              ]);
             }}
           />
         </View>
@@ -207,4 +259,4 @@ class Sale extends PureComponent {
   }
 }
 
-export default Sale;
+export default withNavigationFocus(Sale);
