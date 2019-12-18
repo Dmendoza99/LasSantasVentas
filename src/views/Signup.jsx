@@ -50,9 +50,11 @@ class Signup extends PureComponent {
       }
       Auth.createUserWithEmailAndPassword(email, password).then(userData => {
         userData.user.updateProfile({ displayName: name }).then(() => {
-          Users.add({ email, name, id }).then(() => {
-            Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
-          });
+          Users.doc(userData.user.uid)
+            .set({ email, name, id })
+            .then(() => {
+              Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
+            });
         });
       });
     };

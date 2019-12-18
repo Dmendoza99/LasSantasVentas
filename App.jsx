@@ -15,6 +15,7 @@ import Sale from "./src/views/Sale";
 import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
+import { CurrentUser, Users } from "./src/firebase";
 
 class App extends PureComponent {
   render() {
@@ -41,6 +42,12 @@ const settingStack = createStackNavigator(
   { headerMode: "none" }
 );
 
+if (CurrentUser !== null) {
+  let data = Users.doc(CurrentUser.uid)
+    .get()
+    .then(data => data.data());
+  console.log(data);
+}
 const AppStack = createBottomTabNavigator(
   {
     Home: {
