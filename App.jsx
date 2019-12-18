@@ -11,8 +11,6 @@ import Signup from "./src/views/Signup";
 import Orders from "./src/views/Orders";
 import CreateProducts from "./src/views/CreateProducts";
 import ListProducts from "./src/views/ListProducts";
-import EditProducts from "./src/views/EditProducts";
-import EliminateProducts from "./src/views/EliminateProducts";
 import Sale from "./src/views/Sale";
 import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
@@ -38,12 +36,6 @@ const settingStack = createStackNavigator(
     },
     CreateProducts: {
       screen: CreateProducts,
-    },
-    EditProducts: {
-      screen: EditProducts,
-    },
-    EliminateProducts: {
-      screen: EliminateProducts,
     },
   },
   { headerMode: "none" }
