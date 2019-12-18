@@ -4,9 +4,7 @@
     "slug": "SantaBurga",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": [
-      "android"
-    ],
+    "platforms": ["android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,12 +13,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "android": {
+      "package": "david.sinewave.santaburga"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "androidStatusBar": {
       "barStyle": "light-content",
       "backgroundColor": "#FFC107"
