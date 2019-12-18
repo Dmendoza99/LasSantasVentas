@@ -15,7 +15,6 @@ import Sale from "./src/views/Sale";
 import Settings from "./src/views/Settings";
 import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
-import { CurrentUser, Users } from "./src/firebase";
 
 class App extends PureComponent {
   render() {
@@ -42,13 +41,7 @@ const settingStack = createStackNavigator(
   { headerMode: "none" }
 );
 
-if (CurrentUser !== null) {
-  let data = Users.doc(CurrentUser.uid)
-    .get()
-    .then(data => data.data());
-  console.log(data);
-}
-const AppStack = createBottomTabNavigator(
+const commonStack = createBottomTabNavigator(
   {
     Home: {
       screen: Home,
@@ -107,6 +100,55 @@ const AppStack = createBottomTabNavigator(
   }
 );
 
+const ChefStack = createBottomTabNavigator(
+  {
+    Orders: {
+      screen: Orders,
+      navigationOptions: () => ({
+        tabBarLabel: "Ordenes",
+      }),
+    },
+    Sale: {
+      screen: Sale,
+      navigationOptions: () => ({
+        tabBarLabel: "Vender",
+      }),
+    },
+    Settings: {
+      screen: settingStack,
+      navigationOptions: () => ({
+        tabBarLabel: "Opciones",
+      }),
+    },
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName;
+        switch (routeName) {
+          case "Orders":
+            iconName = "hamburger";
+            break;
+          case "Sale":
+            iconName = "cash";
+            break;
+          case "Settings":
+            iconName = "settings";
+            break;
+          default:
+            break;
+        }
+        return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: theme.colors.secondary,
+      inactiveTintColor: "gray",
+    },
+  }
+);
+
 const AuthStack = createStackNavigator({
   Login: {
     screen: Login,
@@ -127,7 +169,8 @@ const Application = createAppContainer(
   createAnimatedSwitchNavigator(
     {
       AuthLoading: UserValidator,
-      App: AppStack,
+      CommonApp: commonStack,
+      ChefApp: ChefStack,
       Auth: AuthStack,
     },
     {

@@ -22,7 +22,7 @@ class Home extends PureComponent {
   render() {
     const { chart } = style;
     return (
-      <ScrollView>
+      <ScrollView style={{ padding: 10 }}>
         <Text h4>¡Ventas de la semana!</Text>
         <Text h6>En lempiras</Text>
         <BarChart

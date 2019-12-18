@@ -91,9 +91,7 @@ class Orders extends PureComponent {
               return (
                 <ListItem
                   title={`Orden ${item.key}`}
-                  subtitle={`Comentario: ${
-                    validator.isEmpty(item.comment) ? "Vacio" : item.comment
-                  }\nDueño: ${item.owner}`}
+                  subtitle={`Dueño: ${item.owner}`}
                   leftIcon={
                     selectedIndex === 0
                       ? {
@@ -174,6 +172,10 @@ class Orders extends PureComponent {
             {/* eslint-disable-next-line max-len */}
             {`Fecha: ${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
           </Text>
+          {validator.isEmpty(selectedOrder.comment) ? null : (
+            <Text h5>{`Comentario: ${selectedOrder.comment}`}</Text>
+          )}
+
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={Object.values(selectedOrder.items)}
