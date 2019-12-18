@@ -8,13 +8,18 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "primaryColor": "#ffc107",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#ffc107"
     },
     "android": {
-      "package": "david.sinewave.santaburga"
+      "package": "david.sinewave.santaburga",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFC107"
+      }
     },
     "updates": {
       "fallbackToCacheTimeout": 0

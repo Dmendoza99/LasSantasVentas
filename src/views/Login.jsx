@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, ToastAndroid } from "react-native";
 import { Input, Icon, Button, Text } from "react-native-elements";
 import { Auth } from "../firebase";
 import CenteredViewKeyboard from "../components/CenteredViewKeyboard";
@@ -32,13 +32,21 @@ class Login extends PureComponent {
       };
     };
     const handleLogin = () => {
-      Auth.signInWithEmailAndPassword(email, password)
-        .then(user => {
-          console.log(user);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      Auth.signInWithEmailAndPassword(email, password).catch(error => {
+        let alert;
+        switch (error.code) {
+          case "auth/invalid-email":
+            alert = "Correo invalido";
+            break;
+          case "auth/wrong-password":
+            alert = "Contraseña incorrecta";
+            break;
+          default:
+            alert = "Hubo un error";
+            break;
+        }
+        ToastAndroid.show(alert, ToastAndroid.SHORT);
+      });
     };
 
     return (

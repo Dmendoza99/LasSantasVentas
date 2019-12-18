@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, ToastAndroid } from "react-native";
 import { Input, Button, Text, Icon } from "react-native-elements";
 import { TextInputMask } from "react-native-masked-text";
 import validator from "validator";
@@ -40,23 +40,38 @@ class Signup extends PureComponent {
         Alert.alert("Error", "Todos los campos deben estar llenos", [{ text: "Ok" }]);
         return;
       }
-
-      if (!validator.matches(id, /\d{4}-\d{4}-\d{5}/)) {
-        Alert.alert("Error", "Esta Identidad parece tener un error", [{ text: "Ok" }]);
-        return;
-      }
-      if (!validator.isEmail(email)) {
-        Alert.alert("Error", "Este correo parece tener un error", [{ text: "Ok" }]);
-      }
-      Auth.createUserWithEmailAndPassword(email, password).then(userData => {
-        userData.user.updateProfile({ displayName: name }).then(() => {
-          Users.doc(userData.user.uid)
-            .set({ email, name, id })
-            .then(() => {
-              Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
-            });
+      Auth.createUserWithEmailAndPassword(email, password)
+        .then(userData => {
+          userData.user.updateProfile({ displayName: name }).then(() => {
+            Users.doc(userData.user.uid)
+              .set({ email, name, id })
+              .then(() => {
+                Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
+              });
+          });
+        })
+        .catch(error => {
+          let alert;
+          console.log(error.code);
+          switch (error.code) {
+            case "auth/invalid-email":
+              alert = "Correo invalido";
+              break;
+            case "auth/wrong-password":
+              alert = "Contraseña incorrecta";
+              break;
+            case "auth/weak-password":
+              alert = "Contraseña invalida";
+              break;
+            case "auth/email-already-in-use":
+              alert = "correo en uso";
+              break;
+            default:
+              alert = "Hubo un error";
+              break;
+          }
+          ToastAndroid.show(alert, ToastAndroid.SHORT);
         });
-      });
     };
 
     return (

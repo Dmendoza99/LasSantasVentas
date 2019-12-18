@@ -20,6 +20,5 @@ export const Database = firebase.database();
 export const Users = FireStore.collection("Users");
 export const Products = FireStore.collection("Products");
 export const Orders = Database.ref("orders");
-export const CurrentUser = Auth.currentUser;
 
 export default firebase;

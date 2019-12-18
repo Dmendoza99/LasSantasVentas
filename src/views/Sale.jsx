@@ -9,7 +9,7 @@ import harddrink from "../../assets/photos/harddrink.png";
 import hotdrink from "../../assets/photos/hotdrink.png";
 import dessert from "../../assets/photos/dessert.png";
 import { theme } from "../Constants";
-import { Products, Orders } from "../firebase";
+import { Products, Orders, Auth } from "../firebase";
 
 const styles = StyleSheet.create({
   ParallelButtonContainer: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "auto",
   },
-  ButtonContainer: { flex: 1 },
+  ButtonContainer: { flex: 1, marginHorizontal: 2 },
   flatlistContainer: { flex: 6 },
 });
 
@@ -73,7 +73,7 @@ class Sale extends PureComponent {
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, padding: 10 }}>
         <View style={flatlistContainer}>
           {products.length > 0 ? (
             <FlatList
@@ -175,9 +175,16 @@ class Sale extends PureComponent {
               onPress={() => {
                 const items = products.filter(value => value.count > 0);
                 if (items.length > 0) {
-                  const order = { items, comment, active: true, owner, date: new Date().getTime() };
+                  const order = {
+                    items,
+                    comment,
+                    active: true,
+                    owner,
+                    date: new Date().getTime(),
+                    sellerUID: Auth.currentUser.uid,
+                  };
                   if (validator.isEmpty(order.owner)) {
-                    Alert.alert("Error", "Por favor llene el campo duenyo");
+                    Alert.alert("Error", "Por favor llene el campo dueño");
                     return;
                   }
 
