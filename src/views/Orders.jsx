@@ -1,6 +1,15 @@
 import React, { PureComponent } from "react";
 import { ButtonGroup, ListItem, Text, Overlay, Button, Avatar } from "react-native-elements";
-import { View, FlatList, ActivityIndicator, ToastAndroid, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  ToastAndroid,
+  Alert,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import validator from "validator";
 import { Orders as OrdersDB } from "../firebase";
 import { theme } from "../Constants";
 import meal from "../../assets/photos/food.png";
@@ -11,7 +20,7 @@ import dessert from "../../assets/photos/dessert.png";
 
 const styles = StyleSheet.create({
   centeredText: { textAlign: "center" },
-  zeroPadding: { padding: 0 },
+  zeroPadding: { padding: 0, height: "auto", flex: 1 },
   containerBottom: {
     flexDirection: "row",
     alignItems: "center",
@@ -28,9 +37,12 @@ class Orders extends PureComponent {
       selectedIndex: 0,
       orders: [],
       filterredOrders: [],
-      selectedOrder: null,
+      selectedOrder: { items: {}, date: 0, comment: "" },
       showOrder: false,
     };
+  }
+
+  componentDidMount = () => {
     OrdersDB.on("value", data => {
       const all = data.toJSON();
       const orders = [];
@@ -42,7 +54,7 @@ class Orders extends PureComponent {
         ),
       }));
     });
-  }
+  };
 
   componentWillUnmount = () => {
     OrdersDB.off("value");
@@ -61,10 +73,11 @@ class Orders extends PureComponent {
     const buttons = ["Abiertas", "Cerradas"];
     const { selectedIndex, filterredOrders, orders, selectedOrder, showOrder } = this.state;
     const { navigation } = this.props;
-    const { centeredText, zeroPadding, containerBottom, fullSize } = styles;
+    const { centeredText, containerBottom, fullSize } = styles;
+    const date = new Date(selectedOrder.date);
 
     return (
-      <View>
+      <View style={{ flex: 1, padding: 5 }}>
         <ButtonGroup onPress={updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
         {filterredOrders.length > 0 ? (
           <FlatList
@@ -75,12 +88,12 @@ class Orders extends PureComponent {
               Object.keys(item.items).map(
                 val => (total += item.items[val].price * item.items[val].count)
               );
-              const date = new Date(item.date);
               return (
                 <ListItem
                   title={`Orden ${item.key}`}
-                  // eslint-disable-next-line max-len
-                  subtitle={`${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
+                  subtitle={`Comentario: ${
+                    validator.isEmpty(item.comment) ? "Vacio" : item.comment
+                  }\nDueño: ${item.owner}`}
                   leftIcon={
                     selectedIndex === 0
                       ? {
@@ -151,60 +164,63 @@ class Orders extends PureComponent {
           onBackdropPress={() => {
             this.setState({ showOrder: false });
           }}
-          overlayStyle={zeroPadding}>
-          {selectedOrder !== null ? (
-            <View style={{ flex: 1 }}>
-              <View style={{ flex: 6 }}>
-                <FlatList
-                  keyExtractor={(item, index) => index.toString()}
-                  data={Object.values(selectedOrder.items)}
-                  renderItem={({ item }) => {
+          overlayStyle={{
+            height: "auto",
+            maxHeight: Dimensions.get("screen").height * 0.5,
+            padding: 25,
+          }}>
+          <Text h5>{`Orden: ${selectedOrder.key}`}</Text>
+          <Text h5>
+            {/* eslint-disable-next-line max-len */}
+            {`Fecha: ${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
+          </Text>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={Object.values(selectedOrder.items)}
+            renderItem={({ item }) => {
+              return (
+                <ListItem
+                  title={item.name}
+                  rightTitle={`${item.count}`}
+                  leftAvatar={() => {
+                    let source;
+                    if (item.categorie === 0) {
+                      source = meal;
+                    } else if (item.categorie === 1) {
+                      source = softdrink;
+                    } else if (item.categorie === 2) {
+                      source = harddrink;
+                    } else if (item.categorie === 3) {
+                      source = hotdrink;
+                    } else if (item.categorie === 4) {
+                      source = dessert;
+                    }
                     return (
-                      <ListItem
-                        title={item.name}
-                        rightTitle={`${item.count}`}
-                        leftAvatar={() => {
-                          let source;
-                          if (item.categorie === 0) {
-                            source = meal;
-                          } else if (item.categorie === 1) {
-                            source = softdrink;
-                          } else if (item.categorie === 2) {
-                            source = harddrink;
-                          } else if (item.categorie === 3) {
-                            source = hotdrink;
-                          } else if (item.categorie === 4) {
-                            source = dessert;
-                          }
-                          return (
-                            <Avatar
-                              source={source}
-                              overlayContainerStyle={{ backgroundColor: "white" }}
-                              size="medium"
-                            />
-                          );
-                        }}
-                        subtitle={`L. ${item.price.toFixed(2)}`}
-                        bottomDivider
+                      <Avatar
+                        source={source}
+                        overlayContainerStyle={{ backgroundColor: "white" }}
+                        size="medium"
                       />
                     );
                   }}
+                  subtitle={`L. ${item.price.toFixed(2)}`}
+                  bottomDivider
                 />
-              </View>
-              <View style={containerBottom}>
-                {selectedOrder.active ? (
-                  <Button
-                    title="Editar"
-                    containerStyle={fullSize}
-                    onPress={() => {
-                      this.setState({ showOrder: false });
-                      navigation.navigate("Sale", { selectedOrder });
-                    }}
-                  />
-                ) : null}
-              </View>
-            </View>
-          ) : null}
+              );
+            }}
+          />
+          <View style={containerBottom}>
+            {selectedOrder.active ? (
+              <Button
+                title="Editar"
+                containerStyle={fullSize}
+                onPress={() => {
+                  this.setState({ showOrder: false });
+                  navigation.navigate("Sale", { selectedOrder });
+                }}
+              />
+            ) : null}
+          </View>
         </Overlay>
       </View>
     );

@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { Button, ListItem, Avatar, Text, Input, Overlay } from "react-native-elements";
 import { StyleSheet, View, FlatList, ActivityIndicator, Alert, ToastAndroid } from "react-native";
 import { withNavigationFocus } from "react-navigation";
+import validator from "validator";
 import meal from "../../assets/photos/food.png";
 import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
@@ -15,6 +16,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    height: "auto",
   },
   ButtonContainer: { flex: 1 },
   flatlistContainer: { flex: 6 },
@@ -31,6 +33,7 @@ class Sale extends PureComponent {
       showComment: false,
       update: false,
       updatekey: "",
+      owner: "",
     };
     this.getAllProducts();
   }
@@ -66,7 +69,7 @@ class Sale extends PureComponent {
   };
 
   render() {
-    const { products, comment, showComment, backupProducts, update, updatekey } = this.state;
+    const { products, comment, showComment, backupProducts, update, updatekey, owner } = this.state;
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
     return (
@@ -153,6 +156,12 @@ class Sale extends PureComponent {
           animationType="fade"
           animated>
           <Input
+            placeholder="Ejem. Juan Perez"
+            label="Dueño de la orden"
+            value={owner}
+            onChangeText={text => this.setState({ owner: text })}
+          />
+          <Input
             placeholder="Ejem. una Santa burga sin cebolla"
             label="Comentario"
             value={comment}
@@ -164,7 +173,54 @@ class Sale extends PureComponent {
               title="OK"
               containerStyle={{ paddingHorizontal: 2, flex: 1 }}
               onPress={() => {
-                this.setState({ showComment: false });
+                const items = products.filter(value => value.count > 0);
+                if (items.length > 0) {
+                  const order = { items, comment, active: true, owner, date: new Date().getTime() };
+                  if (validator.isEmpty(order.owner)) {
+                    Alert.alert("Error", "Por favor llene el campo duenyo");
+                    return;
+                  }
+
+                  Alert.alert(
+                    "Confirmacion",
+                    "Seguro queres publicar esta orden?",
+                    [
+                      {
+                        text: "OK",
+                        onPress: () => {
+                          if (update) {
+                            delete order.date;
+                            Orders.child(updatekey)
+                              .update({ ...order })
+                              .then(() => {
+                                this.setState({ update: false, updatekey: "" });
+                                navigation.setParams({ selectedOrder: "shit" });
+                                ToastAndroid.show(
+                                  "La orden se ha actualizado con exito",
+                                  ToastAndroid.SHORT
+                                );
+                              });
+                          } else {
+                            Orders.push(order).then(() => {
+                              ToastAndroid.show(
+                                "La orden se ha publicado con exito",
+                                ToastAndroid.SHORT
+                              );
+                            });
+                          }
+                        },
+                      },
+                      {
+                        text: "Cancelar",
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+
+                  this.setState({ products: backupProducts, comment: "", showComment: false });
+                } else {
+                  Alert.alert("Error", "La orden debe tener almenos un producto.");
+                }
               }}
             />
             <Button
@@ -179,56 +235,6 @@ class Sale extends PureComponent {
         <View style={ParallelButtonContainer}>
           <Button
             title="OK"
-            containerStyle={ButtonContainer}
-            onPress={() => {
-              const items = products.filter(value => value.count > 0);
-              if (items.length > 0) {
-                const order = { items, comment, active: true, date: new Date().getTime() };
-
-                Alert.alert(
-                  "Confirmacion",
-                  "Seguro queres publicar esta orden?",
-                  [
-                    {
-                      text: "OK",
-                      onPress: () => {
-                        if (update) {
-                          delete order.date;
-                          Orders.child(updatekey)
-                            .update({ ...order })
-                            .then(() => {
-                              this.setState({ update: false, updatekey: "" });
-                              navigation.setParams({ selectedOrder: "shit" });
-                              ToastAndroid.show(
-                                "La orden se ha actualizado con exito",
-                                ToastAndroid.SHORT
-                              );
-                            });
-                        } else {
-                          Orders.push(order).then(() => {
-                            ToastAndroid.show(
-                              "La orden se ha publicado con exito",
-                              ToastAndroid.SHORT
-                            );
-                          });
-                        }
-                      },
-                    },
-                    {
-                      text: "Cancelar",
-                    },
-                  ],
-                  { cancelable: false }
-                );
-
-                this.setState({ products: backupProducts, comment: "" });
-              } else {
-                Alert.alert("Error", "La orden debe tener almenos un producto.");
-              }
-            }}
-          />
-          <Button
-            title="Comentario"
             containerStyle={ButtonContainer}
             onPress={() => {
               this.setState({ showComment: true });

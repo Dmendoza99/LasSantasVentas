@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { View, Picker, Alert, ToastAndroid } from "react-native";
-import { Button, Input, Avatar } from "react-native-elements";
+import { Button, Input, Avatar, Text } from "react-native-elements";
 import validator from "validator";
 import { categories } from "../Constants";
 import meal from "../../assets/photos/food.png";
@@ -32,7 +32,10 @@ class CreateProducts extends PureComponent {
       source = dessert;
     }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, padding: 5 }}>
+        <Text h2 style={{ paddingBottom: 10 }}>
+          Crear productos
+        </Text>
         <View style={{ flex: 6, flexDirection: "row", padding: 10 }}>
           <Avatar
             source={source}
