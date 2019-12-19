@@ -43,12 +43,12 @@ const settingStack = createStackNavigator(
 
 const commonStack = createBottomTabNavigator(
   {
-    Home: {
-      screen: Home,
-      navigationOptions: () => ({
-        tabBarLabel: "Inicio",
-      }),
-    },
+    // Home: {
+    //   screen: Home,
+    //   navigationOptions: () => ({
+    //     tabBarLabel: "Inicio",
+    //   }),
+    // },
     Orders: {
       screen: Orders,
       navigationOptions: () => ({
@@ -69,7 +69,6 @@ const commonStack = createBottomTabNavigator(
     },
   },
   {
-    initialRouteName: "Home",
     defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;

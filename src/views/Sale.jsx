@@ -8,6 +8,7 @@ import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
 import hotdrink from "../../assets/photos/hotdrink.png";
 import dessert from "../../assets/photos/dessert.png";
+import extra from "../../assets/photos/extra.png";
 import { theme } from "../Constants";
 import { Products, Orders, Auth } from "../firebase";
 
@@ -117,16 +118,28 @@ class Sale extends PureComponent {
                   rightTitle={`${item.count}`}
                   leftAvatar={() => {
                     let source;
-                    if (item.categorie === 0) {
-                      source = meal;
-                    } else if (item.categorie === 1) {
-                      source = softdrink;
-                    } else if (item.categorie === 2) {
-                      source = harddrink;
-                    } else if (item.categorie === 3) {
-                      source = hotdrink;
-                    } else if (item.categorie === 4) {
-                      source = dessert;
+
+                    switch (item.categorie) {
+                      case 0:
+                        source = meal;
+                        break;
+                      case 1:
+                        source = softdrink;
+                        break;
+                      case 2:
+                        source = harddrink;
+                        break;
+                      case 3:
+                        source = hotdrink;
+                        break;
+                      case 4:
+                        source = dessert;
+                        break;
+                      case 5:
+                        source = extra;
+                        break;
+                      default:
+                        break;
                     }
                     return (
                       <Avatar

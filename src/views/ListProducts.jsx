@@ -8,6 +8,7 @@ import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
 import hotdrink from "../../assets/photos/hotdrink.png";
 import dessert from "../../assets/photos/dessert.png";
+import extra from "../../assets/photos/extra.png";
 
 class ListProducts extends PureComponent {
   constructor(props) {
@@ -39,16 +40,28 @@ class ListProducts extends PureComponent {
   render() {
     const { products, showEdit, price, name, categorie, id } = this.state;
     let sourceEdit;
-    if (categorie === 0) {
-      sourceEdit = meal;
-    } else if (categorie === 1) {
-      sourceEdit = softdrink;
-    } else if (categorie === 2) {
-      sourceEdit = harddrink;
-    } else if (categorie === 3) {
-      sourceEdit = hotdrink;
-    } else if (categorie === 4) {
-      sourceEdit = dessert;
+
+    switch (categorie) {
+      case 0:
+        sourceEdit = meal;
+        break;
+      case 1:
+        sourceEdit = softdrink;
+        break;
+      case 2:
+        sourceEdit = harddrink;
+        break;
+      case 3:
+        sourceEdit = hotdrink;
+        break;
+      case 4:
+        sourceEdit = dessert;
+        break;
+      case 5:
+        sourceEdit = extra;
+        break;
+      default:
+        break;
     }
     return (
       <View style={{ flex: 1, padding: 5 }}>
@@ -66,16 +79,27 @@ class ListProducts extends PureComponent {
                   subtitle={`L. ${item.price.toFixed(2)}`}
                   leftAvatar={() => {
                     let source;
-                    if (item.categorie === 0) {
-                      source = meal;
-                    } else if (item.categorie === 1) {
-                      source = softdrink;
-                    } else if (item.categorie === 2) {
-                      source = harddrink;
-                    } else if (item.categorie === 3) {
-                      source = hotdrink;
-                    } else if (item.categorie === 4) {
-                      source = dessert;
+                    switch (item.categorie) {
+                      case 0:
+                        source = meal;
+                        break;
+                      case 1:
+                        source = softdrink;
+                        break;
+                      case 2:
+                        source = harddrink;
+                        break;
+                      case 3:
+                        source = hotdrink;
+                        break;
+                      case 4:
+                        source = dessert;
+                        break;
+                      case 5:
+                        source = extra;
+                        break;
+                      default:
+                        break;
                     }
                     return (
                       <Avatar

@@ -30,4 +30,5 @@ export const categories = [
   "Bebida Alcoholica",
   "Bebida Caliente",
   "Postres",
+  "Otros",
 ];
