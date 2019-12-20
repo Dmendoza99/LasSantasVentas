@@ -17,6 +17,7 @@ import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
 
 class App extends PureComponent {
+
   render() {
     return (
       <ThemeProvider theme={theme}>
