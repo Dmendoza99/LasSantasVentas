@@ -44,7 +44,7 @@ class Signup extends PureComponent {
         .then(userData => {
           userData.user.updateProfile({ displayName: name }).then(() => {
             Users.doc(userData.user.uid)
-              .set({ email, name, id })
+              .set({ email, name, id, categorie: 0 })
               .then(() => {
                 Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
               });

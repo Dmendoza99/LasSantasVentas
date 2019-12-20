@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Alert } from "react-native";
 import { ListItem } from "react-native-elements";
 import { NavigationActions } from "react-navigation";
 import { Auth } from "../firebase";
@@ -41,7 +41,15 @@ class Settings extends PureComponent {
         name: "Cerrar sesión",
         icon: { name: "logout", type: "material-community" },
         onPress: () => {
-          Auth.signOut();
+          Alert.alert("Confirmar", "Seguro queres salir de tu cuenta", [
+            {
+              text: "OK",
+              onPress: () => {
+                Auth.signOut();
+              },
+            },
+            { text: "Cancelar" },
+          ]);
         },
       },
     ];

@@ -65,9 +65,6 @@ class ListProducts extends PureComponent {
     }
     return (
       <View style={{ flex: 1, padding: 5 }}>
-        <Text h2 style={{ paddingBottom: 10 }}>
-          productos
-        </Text>
         {products.length > 0 ? (
           <FlatList
             keyExtractor={(item, index) => index.toString()}
