@@ -36,10 +36,9 @@ class Sale extends PureComponent {
       updatekey: "",
       owner: "",
     };
-    this.getAllProducts();
   }
 
-  getAllProducts = () => {
+  componentDidMount = () => {
     Products.get().then(querySnap => {
       const products = [];
       querySnap.forEach(doc => {
@@ -193,7 +192,7 @@ class Sale extends PureComponent {
                     comment,
                     active: true,
                     owner,
-                    date: new Date().getTime(),
+                    saleDate: new Date().getTime(),
                     sellerUID: Auth.currentUser.uid,
                   };
                   if (validator.isEmpty(order.owner)) {

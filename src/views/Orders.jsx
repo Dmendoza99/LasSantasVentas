@@ -74,7 +74,7 @@ class Orders extends PureComponent {
     const { selectedIndex, filterredOrders, orders, selectedOrder, showOrder } = this.state;
     const { navigation } = this.props;
     const { centeredText, containerBottom, fullSize } = styles;
-    const date = new Date(selectedOrder.date);
+    const saleDate = new Date(selectedOrder.saleDate);
 
     return (
       <View style={{ flex: 1, padding: 5 }}>
@@ -110,7 +110,7 @@ class Orders extends PureComponent {
                                   text: "OK",
                                   onPress: () => {
                                     OrdersDB.child(item.key)
-                                      .update({ active: false })
+                                      .update({ active: false, closingDate: new Date().getTime() })
                                       .then(() => {
                                         ToastAndroid.show(
                                           "Orden Cerrada Exitosamente",
@@ -170,7 +170,7 @@ class Orders extends PureComponent {
           <Text h5>{`Orden: ${selectedOrder.key}`}</Text>
           <Text h5>
             {/* eslint-disable-next-line max-len */}
-            {`Fecha: ${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}
+            {`Fecha: ${saleDate.getHours()}:${saleDate.getMinutes()} ${saleDate.getDate()}/${saleDate.getMonth()}/${saleDate.getFullYear()}`}
           </Text>
           {validator.isEmpty(selectedOrder.comment) ? null : (
             <Text h5>{`Comentario: ${selectedOrder.comment}`}</Text>
