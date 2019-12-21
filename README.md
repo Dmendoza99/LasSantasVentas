@@ -9,19 +9,6 @@ This is a small POS for keeping track of my restaurant's sales.
 This project exists because of the need of cheap open source solutions in Honduras.
 
 ## Code style
-
-- babel-eslint
-- babel-preset-expo
-- eslint
-- eslint-config-airbnb
-- eslint-config-prettier
-- eslint-plugin-import
-- eslint-plugin-jsx-a11y
-- eslint-plugin-prettier
-- eslint-plugin-react
-- prettier
-- pretty-quick
-
 ### .eslintrc
 
 ```json
@@ -41,8 +28,7 @@ This project exists because of the need of cheap open source solutions in Hondur
     "react/jsx-filename-extension": ["off"],
     "react/jsx-closing-bracket-location": [1, "tag-aligned"],
     "react/prop-types": ["off"],
-    "no-return-assign": ["off"],
-    "import/no-cycle": ["off"]
+    "no-return-assign": ["off"]
   }
 }
 ```
