@@ -272,6 +272,7 @@ class Sale extends PureComponent {
                       comment: "",
                       update: false,
                       updatekey: "",
+                      owner: "",
                     });
                     navigation.setParams({ selectedOrder: "shit" });
                     ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);

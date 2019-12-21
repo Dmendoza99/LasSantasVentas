@@ -72,6 +72,7 @@ class ListProducts extends PureComponent {
             renderItem={({ item }) => {
               return (
                 <ListItem
+                  key={item.id}
                   title={item.name}
                   subtitle={`L. ${item.price.toFixed(2)}`}
                   leftAvatar={() => {
@@ -195,7 +196,8 @@ class ListProducts extends PureComponent {
                 selectedValue={categorie}
                 onValueChange={categoria => this.setState({ categorie: categoria })}>
                 {categories.map((cat, index) => (
-                  <Picker.Item label={cat} value={index} />
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Picker.Item key={index} label={cat} value={index} />
                 ))}
               </Picker>
             </View>

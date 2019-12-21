@@ -2,10 +2,18 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "test": "jest",
+    "testUpdate": "jest -u",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
+    ]
   },
   "dependencies": {
     "expo": "^36.0.0",
@@ -28,6 +36,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "babel-preset-expo": "^7.1.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
@@ -36,6 +45,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.17.0",
+    "jest-expo": "^36.0.1",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "react-test-renderer": "^16.12.0"
