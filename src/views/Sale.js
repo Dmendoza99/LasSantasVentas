@@ -236,7 +236,12 @@ class Sale extends PureComponent {
                     { cancelable: false }
                   );
 
-                  this.setState({ products: backupProducts, comment: "", showComment: false });
+                  this.setState({
+                    products: backupProducts,
+                    comment: "",
+                    showComment: false,
+                    owner: "",
+                  });
                 } else {
                   Alert.alert("Error", "La orden debe tener almenos un producto.");
                 }

@@ -134,6 +134,21 @@ class Orders extends PureComponent {
                   onPress={() => {
                     this.setState({ showOrder: true, selectedOrder: item });
                   }}
+                  onLongPress={() => {
+                    Alert.alert("Confirmacion", "Seguro queres eliminar esta orden", [
+                      {
+                        text: "OK",
+                        onPress: () => {
+                          OrdersDB.child(item.key)
+                            .remove()
+                            .then(() => {
+                              ToastAndroid.show("Orden Eliminada con exito", ToastAndroid.SHORT);
+                            });
+                        },
+                      },
+                      { text: "Cancelar" },
+                    ]);
+                  }}
                 />
               );
             }}
