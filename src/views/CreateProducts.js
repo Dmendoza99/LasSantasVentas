@@ -15,7 +15,7 @@ class CreateProducts extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { categorie: 0, price: 0, name: "" };
+    this.state = { categorie: 0, price: "", name: "" };
   }
 
   render() {
@@ -92,6 +92,7 @@ class CreateProducts extends PureComponent {
                     const product = { name, price: Number.parseFloat(price), categorie };
                     if (!validator.isEmpty(product.name)) {
                       Products.add(product).then(() => {
+                        this.setState({ name: "", price: "", categorie: 0 });
                         ToastAndroid.show("Producto agregado con exito", ToastAndroid.SHORT);
                       });
                     } else {
