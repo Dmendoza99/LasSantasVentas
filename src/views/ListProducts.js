@@ -234,7 +234,6 @@ class ListProducts extends PureComponent {
               title="Cancelar"
               containerStyle={{ flex: 1, paddingHorizontal: 2 }}
               onPress={() => {
-                console.log(this.state);
                 this.setState({
                   showEdit: false,
                   name: "",

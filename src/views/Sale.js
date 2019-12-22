@@ -61,6 +61,7 @@ class Sale extends PureComponent {
         this.setState({
           comment: selectedOrder.comment,
           products: [...productos, ...selected],
+          owner: selectedOrder.owner,
           update: true,
           updatekey: selectedOrder.key,
         });

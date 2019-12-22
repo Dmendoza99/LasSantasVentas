@@ -51,7 +51,6 @@ class Signup extends PureComponent {
         })
         .catch(error => {
           let alert;
-          console.log(error.code);
           switch (error.code) {
             case "auth/invalid-email":
               alert = "Correo invalido";

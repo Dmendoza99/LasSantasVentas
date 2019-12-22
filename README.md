@@ -9,6 +9,7 @@ This is a small POS for keeping track of my restaurant's sales.
 This project exists because of the need of cheap open source solutions in Honduras.
 
 ## Code style
+
 ### .eslintrc
 
 ```json
