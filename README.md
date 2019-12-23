@@ -2,11 +2,11 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/Dmendoza99/SantaBurga) ![License](https://img.shields.io/github/license/Dmendoza99/SantaBurga.svg) ![Issues](https://img.shields.io/github/issues/Dmendoza99/SantaBurga.svg)
 
-This is a small POS for keeping track of my restaurant's sales.
+This is a small POS so I can keep track of my restaurant's sales.
 
 ## Motivation
 
-This project exists because of the need of cheap open source solutions in Honduras.
+This project exists because I needed to keep track of the orders.
 
 ## Code style
 
