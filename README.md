@@ -4,11 +4,11 @@
 
 This is a small POS so I can keep track of my restaurant's sales.
 
-## Motivation
+## Motivation :question:
 
 This project exists because I needed to keep track of the orders.
 
-## Code style
+## Code style :lipstick:
 
 ### .eslintrc
 
@@ -46,7 +46,7 @@ This project exists because I needed to keep track of the orders.
 }
 ```
 
-## Installation
+## Installation :inbox_tray:
 
 ```bash
 git clone https://github.com/Dmendoza99/SantaBurga
@@ -54,10 +54,10 @@ cd SantaBurga
 npm install
 ```
 
-## Bugs 🐛
+## Bugs :bug:
 
 This app is getting upgrades in my free time if there is a problem please create a bug report in the issues section.
 
-## License
+## License :scroll:
 
 - Licensed under [GNU GPLv3](https://github.com/Dmendoza99/SantaBurga/blob/master/LICENSE)
