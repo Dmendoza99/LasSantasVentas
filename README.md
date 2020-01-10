@@ -1,6 +1,6 @@
 # SantaBurga made with :heart:, :hamburger:, :coffee: and some :beer:
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/Dmendoza99/SantaBurga) ![License](https://img.shields.io/github/license/Dmendoza99/SantaBurga.svg) ![Issues](https://img.shields.io/github/issues/Dmendoza99/SantaBurga.svg)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/Dmendoza99/SantaBurga) ![License](https://img.shields.io/github/license/Dmendoza99/SantaBurga.svg) ![Issues](https://img.shields.io/github/issues/Dmendoza99/SantaBurga.svg) ![Unicorn](https://cdn.rawgit.com/LunaGao/BlessYourCodeTag/master/tags/unicorn.svg)
 
 This is a small POS so I can keep track of my restaurant's sales.
 
