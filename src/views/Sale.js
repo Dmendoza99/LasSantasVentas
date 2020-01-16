@@ -35,6 +35,7 @@ class Sale extends PureComponent {
       update: false,
       updatekey: "",
       owner: "",
+      descuento: "",
     };
   }
 
@@ -57,6 +58,7 @@ class Sale extends PureComponent {
         const selected = [...Object.values(selectedOrder.items)];
         let productos = products;
         selected.map(selc => (productos = productos.filter(value => value.id !== selc.id)));
+        console.log(selectedOrder);
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
           comment: selectedOrder.comment,
@@ -64,13 +66,23 @@ class Sale extends PureComponent {
           owner: selectedOrder.owner,
           update: true,
           updatekey: selectedOrder.key,
+          descuento: String(selectedOrder.discount),
         });
       }
     }
   };
 
   render() {
-    const { products, comment, showComment, backupProducts, update, updatekey, owner } = this.state;
+    const {
+      products,
+      comment,
+      showComment,
+      backupProducts,
+      update,
+      updatekey,
+      owner,
+      descuento,
+    } = this.state;
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
     return (
@@ -82,6 +94,7 @@ class Sale extends PureComponent {
               data={products}
               renderItem={({ item }) => (
                 <ListItem
+                  bottomDivider
                   title={item.name}
                   leftIcon={{
                     name: "minus",
@@ -150,7 +163,6 @@ class Sale extends PureComponent {
                     );
                   }}
                   subtitle={`L. ${item.price.toFixed(2)}`}
-                  bottomDivider
                 />
               )}
             />
@@ -175,6 +187,15 @@ class Sale extends PureComponent {
             onChangeText={text => this.setState({ owner: text })}
           />
           <Input
+            placeholder="Por defecto 0%"
+            label="Descuento"
+            value={descuento}
+            keyboardType="number-pad"
+            onChangeText={text => {
+              this.setState({ descuento: text });
+            }}
+          />
+          <Input
             placeholder="Ejem. una Santa burga sin cebolla"
             label="Comentario"
             value={comment}
@@ -195,6 +216,9 @@ class Sale extends PureComponent {
                     owner,
                     saleDate: new Date().getTime(),
                     sellerUID: Auth.currentUser.uid,
+                    discount: Number.parseInt(descuento === "" ? "0" : descuento, 10),
+                    /* debo ver que pedo aqui por que creo que necesito guardar el numero, 
+                     de descuento, no el multiplo del total (para poder editar) */
                   };
                   if (validator.isEmpty(order.owner)) {
                     Alert.alert("Error", "Por favor llene el campo dueño");
@@ -242,6 +266,7 @@ class Sale extends PureComponent {
                     comment: "",
                     showComment: false,
                     owner: "",
+                    descuento: "",
                   });
                 } else {
                   Alert.alert("Error", "La orden debe tener almenos un producto.");
@@ -279,6 +304,7 @@ class Sale extends PureComponent {
                       update: false,
                       updatekey: "",
                       owner: "",
+                      descuento: "",
                     });
                     navigation.setParams({ selectedOrder: "shit" });
                     ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);

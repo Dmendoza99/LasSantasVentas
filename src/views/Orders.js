@@ -89,6 +89,7 @@ class Orders extends PureComponent {
               Object.keys(item.items).map(
                 val => (total += item.items[val].price * item.items[val].count)
               );
+              total *= ((100 - item.discount) / 100);
               return (
                 <ListItem
                   title={`Orden ${item.key}`}
@@ -191,7 +192,9 @@ class Orders extends PureComponent {
           {validator.isEmpty(selectedOrder.comment) ? null : (
             <Text h5>{`Comentario: ${selectedOrder.comment}`}</Text>
           )}
-
+          {selectedOrder.discount !== 0 ? (
+            <Text h5>{`Descuento: ${selectedOrder.discount}%`}</Text>
+          ) : null}
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={Object.values(selectedOrder.items)}
