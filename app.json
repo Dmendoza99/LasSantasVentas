@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Santa Burga",
-    "slug": "SantaBurga",
+    "name": "Santo POS",
+    "slug": "SantoPOS",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["android"],
@@ -15,7 +15,7 @@
       "backgroundColor": "#ffc107"
     },
     "android": {
-      "package": "david.sinewave.santaburga",
+      "package": "david.personal.santopos",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFC107"
