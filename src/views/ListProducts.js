@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { View, FlatList, Alert, ToastAndroid, ActivityIndicator, Picker } from "react-native";
 import { ListItem, Avatar, Icon, Text, Overlay, Input, Button } from "react-native-elements";
 import { theme, categories } from "../Constants";
-import { Products } from "../firebase";
+import { Products, Auth } from "../firebase";
 import meal from "../../assets/photos/food.png";
 import softdrink from "../../assets/photos/softdrink.png";
 import harddrink from "../../assets/photos/harddrink.png";
@@ -24,13 +24,17 @@ class ListProducts extends PureComponent {
   }
 
   getAllProducts = () => {
-    Products.get().then(querySnap => {
-      const products = [];
-      querySnap.forEach(doc => {
-        products.push({ ...doc.data(), id: doc.id });
-      });
-      this.setState({ products });
-    });
+    if (Auth.currentUser !== null) {
+      Products(Auth.currentUser.uid)
+        .get()
+        .then(querySnap => {
+          const products = [];
+          querySnap.forEach(doc => {
+            products.push({ ...doc.data(), id: doc.id });
+          });
+          this.setState({ products });
+        });
+    }
   };
 
   componentDidMount = () => {
@@ -112,10 +116,12 @@ class ListProducts extends PureComponent {
                     type: "material-community",
                     onPress: () => {
                       Alert.alert("Confirmacion", "Seguro queres borrar este producto?", [
+                        { text: "Cancelar" },
                         {
                           text: "OK",
                           onPress: () => {
-                            Products.doc(item.id)
+                            Products(Auth.currentUser.uid)
+                              .doc(item.id)
                               .delete()
                               .then(() => {
                                 ToastAndroid.show(
@@ -126,7 +132,6 @@ class ListProducts extends PureComponent {
                               });
                           },
                         },
-                        { text: "Cancelar" },
                       ]);
                     },
                   }}
@@ -208,10 +213,12 @@ class ListProducts extends PureComponent {
               containerStyle={{ flex: 1, paddingHorizontal: 2 }}
               onPress={() => {
                 Alert.alert("Confirmacion", "Seguro queres actualizar este producto?", [
+                  { text: "Cancelar" },
                   {
                     text: "OK",
                     onPress: () => {
-                      Products.doc(id)
+                      Products(Auth.currentUser.uid)
+                        .doc(id)
                         .update({ name, price, categorie })
                         .then(() => {
                           this.setState({
@@ -226,7 +233,6 @@ class ListProducts extends PureComponent {
                         });
                     },
                   },
-                  { text: "Cancelar" },
                 ]);
               }}
             />

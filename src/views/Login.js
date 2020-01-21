@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
 import { StyleSheet, TouchableOpacity, ToastAndroid, View } from "react-native";
-import { Input, Icon, Button, Text } from "react-native-elements";
+import { Input, Icon, Button, Text, Avatar } from "react-native-elements";
 import { Auth } from "../firebase";
 import { theme } from "../Constants";
+import icon from "../../assets/icon.png";
 
 const styles = StyleSheet.create({
   OuterStyle: { backgroundColor: theme.colors.secondary, flex: 1, justifyContent: "center" },
@@ -57,13 +58,21 @@ class Login extends PureComponent {
     return (
       <View style={OuterStyle}>
         <View style={InnerStyle}>
+          <View style={{ alignItems: "center", marginBottom: 20 }}>
+            <Avatar
+              source={icon}
+              overlayContainerStyle={{ backgroundColor: "#00000000" }}
+              size="xlarge"
+            />
+          </View>
+
           <Input
             placeholder="Email"
             label="Email"
             autoCompleteType="email"
             keyboardType="email-address"
             leftIconContainerStyle={{ marginRight: 5 }}
-            containerStyle={{ backgroundColor: "white", borderRadius: 5 }}
+            containerStyle={{ backgroundColor: "white", borderRadius: 5, marginBottom: 5 }}
             leftIcon={<Icon name="email" type="material-community" size={24} color="gray" />}
             value={email}
             onChangeText={handleInput("email")}

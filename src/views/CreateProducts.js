@@ -54,7 +54,7 @@ class CreateProducts extends PureComponent {
           <View style={{ flex: 1 }}>
             <Input
               label="Nombre"
-              placeholder="Santa burga"
+              placeholder="Baleado"
               onChangeText={text => {
                 this.setState({ name: text });
               }}
@@ -87,6 +87,9 @@ class CreateProducts extends PureComponent {
             onPress={() => {
               Alert.alert("Confirmacion", "Seguro queres agregar este producto", [
                 {
+                  text: "Cancelar",
+                },
+                {
                   text: "OK",
                   onPress: () => {
                     const product = { name, price: Number.parseFloat(price), categorie };
@@ -102,9 +105,6 @@ class CreateProducts extends PureComponent {
                       );
                     }
                   },
-                },
-                {
-                  text: "Cancelar",
                 },
               ]);
             }}

@@ -18,7 +18,13 @@ export const Auth = firebase.auth();
 export const FireStore = firebase.firestore();
 export const Database = firebase.database();
 export const Users = FireStore.collection("Users");
-export const Products = FireStore.collection("Products");
-export const Orders = Database.ref("orders");
+
+export const Products = user => {
+  return FireStore.collection(`${user}_Products`);
+};
+
+export const Orders = user => {
+  return Database.ref(`${user}_orders`);
+};
 
 export default firebase;

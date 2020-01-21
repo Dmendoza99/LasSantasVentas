@@ -2,12 +2,12 @@ import React, { PureComponent } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { BarChart } from "react-native-chart-kit";
-import { Orders } from "../firebase";
+import { Orders, Auth } from "../firebase";
 
 const style = StyleSheet.create({
   chart: {
-    marginVertical: 8,
-    marginHorizontal: 50,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
     borderRadius: 16,
     alignSelf: "center",
   },
@@ -17,22 +17,59 @@ class Home extends PureComponent {
   constructor(props) {
     super(props);
 
-    // eslint-disable-next-line react/no-unused-state
-    this.state = { orders: [], date: new Date() };
-    Orders.once("value", data => {
-      const aux = data.exportVal();
-      // eslint-disable-next-line react/no-unused-state
-      this.setState({ orders: Object.values(aux) });
-    });
+    this.state = { orders: [] };
   }
+
+  componentDidMount = () => {
+    if (Auth.currentUser !== null) {
+      Orders(Auth.currentUser.uid).once("value", data => {
+        const aux = data.exportVal();
+        this.setState({ orders: Object.values(aux) });
+      });
+    }
+  };
 
   render() {
     const getWeekReport = () => {
+      const months = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ];
+      const { orders } = this.state;
+      const reportMonths = {};
+      const d = new Date();
+      for (let i = 0; i < 3; i += 1) {
+        reportMonths[`${months[d.getMonth()]}/${d.getFullYear().toString()}`] = 0;
+        d.setMonth(d.getMonth() - 1);
+      }
+
+      // eslint-disable-next-line array-callback-return
+      orders.map(order => {
+        const saleDate = new Date(order.saleDate);
+        const month = `${months[saleDate.getMonth()]}/${saleDate.getFullYear().toString()}`;
+        let total = Object.values(order.items).reduce((acc, { price, count }) => {
+          return acc + price * count;
+        }, 0);
+        total -= total * order.discount;
+        if (month in reportMonths) {
+          reportMonths[month] += total;
+        }
+      });
       return {
-        labels: ["Viernes", "Sabado", "Domingo"],
+        labels: [...Object.keys(reportMonths)],
         datasets: [
           {
-            data: [130 * 2, 160 * 2, 100 * 4],
+            data: [...Object.values(reportMonths)],
           },
         ],
       };
@@ -41,7 +78,7 @@ class Home extends PureComponent {
     const { chart } = style;
     return (
       <View style={{ padding: 10 }}>
-        <Text h4>Ventas</Text>
+        <Text h4>Ventas de los ultimos 3 meses</Text>
         <Text h6>En lempiras</Text>
         <BarChart
           fromZero
@@ -54,9 +91,6 @@ class Home extends PureComponent {
             backgroundGradientTo: "#efefef",
             decimalPlaces: 2, // optional, defaults to 2dp
             color: (opacity = 0.5) => `rgba(0, 0, 0, ${opacity})`,
-            style: {
-              paddingHorizontal: 250,
-            },
           }}
           style={chart}
         />

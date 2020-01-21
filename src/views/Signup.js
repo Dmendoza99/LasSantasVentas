@@ -9,8 +9,8 @@ import { Auth, Users } from "../firebase";
 const styles = StyleSheet.create({
   OuterStyle: { backgroundColor: theme.colors.secondary, flex: 1, justifyContent: "center" },
   InnerStyle: { width: "75%", marginLeft: "12.5%", alignItems: "center", justifyContent: "center" },
-  ButtonStyle: { marginTop: 5 },
-  InputStyle: { backgroundColor: "white", borderRadius: 5 },
+  ButtonStyle: {},
+  InputStyle: { backgroundColor: "white", borderRadius: 5, marginBottom: 5 },
   IconStyle: { marginRight: 5 },
   TextStyle: { color: "white", fontWeight: "bold", fontSize: 24 },
 });
@@ -45,7 +45,7 @@ class Signup extends PureComponent {
             Users.doc(userData.user.uid)
               .set({ email, name, id, categorie: 0 })
               .then(() => {
-                Alert.alert("Usuario agregado", "Usuario agregado exitosamente", [{ text: "Ok" }]);
+                ToastAndroid.show("Usuario agregado exitosamente", ToastAndroid.SHORT);
               });
           });
         })
@@ -75,8 +75,8 @@ class Signup extends PureComponent {
     return (
       <View style={OuterStyle}>
         <View style={InnerStyle}>
-          <Text h4 style={{ color: "white" }}>
-            Por favor llenar estos datos, para crear una cuenta.
+          <Text h4 style={{ color: "white", marginBottom: 10 }}>
+            Por favor llena estos datos.
           </Text>
           <Input
             placeholder="Nombre"

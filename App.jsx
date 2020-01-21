@@ -17,7 +17,6 @@ import UserValidator from "./src/components/UserValidator";
 import { theme } from "./src/Constants";
 
 class App extends PureComponent {
-
   render() {
     return (
       <ThemeProvider theme={theme}>
@@ -44,12 +43,12 @@ const settingStack = createStackNavigator(
 
 const commonStack = createBottomTabNavigator(
   {
-    // Home: {
-    //   screen: Home,
-    //   navigationOptions: () => ({
-    //     tabBarLabel: "Inicio",
-    //   }),
-    // },
+    Home: {
+      screen: Home,
+      navigationOptions: () => ({
+        tabBarLabel: "Inicio",
+      }),
+    },
     Orders: {
       screen: Orders,
       navigationOptions: () => ({
@@ -100,55 +99,6 @@ const commonStack = createBottomTabNavigator(
   }
 );
 
-const ChefStack = createBottomTabNavigator(
-  {
-    Orders: {
-      screen: Orders,
-      navigationOptions: () => ({
-        tabBarLabel: "Ordenes",
-      }),
-    },
-    Sale: {
-      screen: Sale,
-      navigationOptions: () => ({
-        tabBarLabel: "Vender",
-      }),
-    },
-    Settings: {
-      screen: settingStack,
-      navigationOptions: () => ({
-        tabBarLabel: "Opciones",
-      }),
-    },
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        switch (routeName) {
-          case "Orders":
-            iconName = "hamburger";
-            break;
-          case "Sale":
-            iconName = "cash";
-            break;
-          case "Settings":
-            iconName = "settings";
-            break;
-          default:
-            break;
-        }
-        return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
-      },
-    }),
-    tabBarOptions: {
-      activeTintColor: theme.colors.secondary,
-      inactiveTintColor: "gray",
-    },
-  }
-);
-
 const AuthStack = createStackNavigator({
   Login: {
     screen: Login,
@@ -170,7 +120,6 @@ const Application = createAppContainer(
     {
       AuthLoading: UserValidator,
       CommonApp: commonStack,
-      ChefApp: ChefStack,
       Auth: AuthStack,
     },
     {

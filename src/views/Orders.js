@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import validator from "validator";
-import { Orders as OrdersDB } from "../firebase";
+import { Orders as OrdersDB, Auth } from "../firebase";
 import { theme } from "../Constants";
 import meal from "../../assets/photos/food.png";
 import softdrink from "../../assets/photos/softdrink.png";
@@ -44,21 +44,23 @@ class Orders extends PureComponent {
   }
 
   componentDidMount = () => {
-    OrdersDB.on("value", data => {
-      const all = data.toJSON();
-      const orders = [];
-      Object.keys(all).map(key => orders.push({ ...all[key], key }));
-      this.setState(state => ({
-        orders,
-        filterredOrders: orders.filter(order =>
-          state.selectedIndex === 0 ? order.active : !order.active
-        ),
-      }));
-    });
+    if (Auth.currentUser !== null) {
+      OrdersDB(Auth.currentUser.uid).on("value", data => {
+        const all = data.toJSON();
+        const orders = [];
+        Object.keys(all).map(key => orders.push({ ...all[key], key }));
+        this.setState(state => ({
+          orders,
+          filterredOrders: orders.filter(order =>
+            state.selectedIndex === 0 ? order.active : !order.active
+          ),
+        }));
+      });
+    }
   };
 
   componentWillUnmount = () => {
-    OrdersDB.off("value");
+    OrdersDB(Auth.currentUser.uid).off("value");
   };
 
   render() {
@@ -89,7 +91,7 @@ class Orders extends PureComponent {
               Object.keys(item.items).map(
                 val => (total += item.items[val].price * item.items[val].count)
               );
-              total *= ((100 - item.discount) / 100);
+              total *= (100 - item.discount) / 100;
               return (
                 <ListItem
                   title={`Orden ${item.key}`}
@@ -109,9 +111,13 @@ class Orders extends PureComponent {
                               "Seguro queres cerrar esta orden?",
                               [
                                 {
+                                  text: "Cancelar",
+                                },
+                                {
                                   text: "OK",
                                   onPress: () => {
-                                    OrdersDB.child(item.key)
+                                    OrdersDB(Auth.currentUser.uid)
+                                      .child(item.key)
                                       .update({ active: false, closingDate: new Date().getTime() })
                                       .then(() => {
                                         ToastAndroid.show(
@@ -120,9 +126,6 @@ class Orders extends PureComponent {
                                         );
                                       });
                                   },
-                                },
-                                {
-                                  text: "Cancelar",
                                 },
                               ],
                               { cancelable: false }
@@ -138,17 +141,18 @@ class Orders extends PureComponent {
                   }}
                   onLongPress={() => {
                     Alert.alert("Confirmacion", "Seguro queres eliminar esta orden", [
+                      { text: "Cancelar" },
                       {
                         text: "OK",
                         onPress: () => {
-                          OrdersDB.child(item.key)
+                          OrdersDB(Auth.currentUser.uid)
+                            .child(item.key)
                             .remove()
                             .then(() => {
                               ToastAndroid.show("Orden Eliminada con exito", ToastAndroid.SHORT);
                             });
                         },
                       },
-                      { text: "Cancelar" },
                     ]);
                   }}
                 />

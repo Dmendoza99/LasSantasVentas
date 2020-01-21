@@ -40,13 +40,15 @@ class Sale extends PureComponent {
   }
 
   componentDidMount = () => {
-    Products.get().then(querySnap => {
-      const products = [];
-      querySnap.forEach(doc => {
-        products.push({ ...doc.data(), count: 0, id: doc.id });
+    Products(Auth.currentUser.uid)
+      .get()
+      .then(querySnap => {
+        const products = [];
+        querySnap.forEach(doc => {
+          products.push({ ...doc.data(), count: 0, id: doc.id });
+        });
+        this.setState({ products, backupProducts: products });
       });
-      this.setState({ products, backupProducts: products });
-    });
   };
 
   componentDidUpdate = prevProps => {
@@ -58,7 +60,6 @@ class Sale extends PureComponent {
         const selected = [...Object.values(selectedOrder.items)];
         let productos = products;
         selected.map(selc => (productos = productos.filter(value => value.id !== selc.id)));
-        console.log(selectedOrder);
         // eslint-disable-next-line react/no-did-update-set-state
         this.setState({
           comment: selectedOrder.comment,
@@ -230,11 +231,15 @@ class Sale extends PureComponent {
                     "Seguro queres publicar esta orden?",
                     [
                       {
+                        text: "Cancelar",
+                      },
+                      {
                         text: "OK",
                         onPress: () => {
                           if (update) {
                             delete order.date;
-                            Orders.child(updatekey)
+                            Orders(Auth.currentUser.uid)
+                              .child(updatekey)
                               .update({ ...order })
                               .then(() => {
                                 this.setState({ update: false, updatekey: "" });
@@ -245,17 +250,16 @@ class Sale extends PureComponent {
                                 );
                               });
                           } else {
-                            Orders.push(order).then(() => {
-                              ToastAndroid.show(
-                                "La orden se ha publicado con exito",
-                                ToastAndroid.SHORT
-                              );
-                            });
+                            Orders(Auth.currentUser.uid)
+                              .push(order)
+                              .then(() => {
+                                ToastAndroid.show(
+                                  "La orden se ha publicado con exito",
+                                  ToastAndroid.SHORT
+                                );
+                              });
                           }
                         },
-                      },
-                      {
-                        text: "Cancelar",
                       },
                     ],
                     { cancelable: false }
@@ -284,19 +288,13 @@ class Sale extends PureComponent {
         </Overlay>
         <View style={ParallelButtonContainer}>
           <Button
-            title="OK"
-            containerStyle={ButtonContainer}
-            onPress={() => {
-              this.setState({ showComment: true });
-            }}
-          />
-          <Button
             title="Cancelar"
             containerStyle={ButtonContainer}
             onPress={() => {
               Alert.alert("Confirmacion", "Seguro queres cancelar la orden?", [
+                { text: "Cancelar" },
                 {
-                  text: "Ok",
+                  text: "OK",
                   onPress: () => {
                     this.setState({
                       products: backupProducts,
@@ -310,8 +308,14 @@ class Sale extends PureComponent {
                     ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);
                   },
                 },
-                { text: "Cancelar" },
               ]);
+            }}
+          />
+          <Button
+            title="OK"
+            containerStyle={ButtonContainer}
+            onPress={() => {
+              this.setState({ showComment: true });
             }}
           />
         </View>

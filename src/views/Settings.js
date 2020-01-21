@@ -42,13 +42,13 @@ class Settings extends PureComponent {
         icon: { name: "logout", type: "material-community" },
         onPress: () => {
           Alert.alert("Confirmar", "Seguro queres salir de tu cuenta", [
+            { text: "Cancelar" },
             {
               text: "OK",
               onPress: () => {
                 Auth.signOut();
               },
             },
-            { text: "Cancelar" },
           ]);
         },
       },
