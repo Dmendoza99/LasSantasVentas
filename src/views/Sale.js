@@ -54,9 +54,9 @@ class Sale extends PureComponent {
   componentDidUpdate = prevProps => {
     const { isFocused, navigation } = this.props;
     if (prevProps.isFocused === false && isFocused) {
-      const { products } = this.state;
       const selectedOrder = navigation.getParam("selectedOrder", "shit");
       if (selectedOrder !== "shit") {
+        const { products } = this.state;
         const selected = [...Object.values(selectedOrder.items)];
         let productos = products;
         selected.map(selc => (productos = productos.filter(value => value.id !== selc.id)));
