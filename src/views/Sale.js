@@ -197,7 +197,7 @@ class Sale extends PureComponent {
             }}
           />
           <Input
-            placeholder="Ejem. una Santa burga sin cebolla"
+            placeholder="Ejem. una hamburguesa sin cebolla"
             label="Comentario"
             value={comment}
             onChangeText={text => this.setState({ comment: text })}

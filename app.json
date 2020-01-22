@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Santo POS",
-    "slug": "SantoPOS",
+    "name": "Las Santas Ventas",
+    "slug": "LasSantasVentas",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["android"],
@@ -15,10 +15,9 @@
       "backgroundColor": "#ffc107"
     },
     "android": {
-      "package": "david.personal.santopos",
+      "package": "david.personal.lassantasventas",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#FFC107"
+        "foregroundImage": "./assets/icon.png"
       }
     },
     "updates": {

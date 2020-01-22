@@ -78,7 +78,7 @@ const commonStack = createBottomTabNavigator(
             iconName = "chart-areaspline";
             break;
           case "Orders":
-            iconName = "hamburger";
+            iconName = "food";
             break;
           case "Sale":
             iconName = "cash";

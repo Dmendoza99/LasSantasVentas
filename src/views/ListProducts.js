@@ -180,7 +180,7 @@ class ListProducts extends PureComponent {
             <View style={{ flex: 2 }}>
               <Input
                 label="Nombre"
-                placeholder="Santa burga"
+                placeholder="Hamburguesa"
                 onChangeText={text => {
                   this.setState({ name: text });
                 }}
