@@ -11,11 +11,12 @@ class UserValidator extends Component {
           .get()
           .then(value => value.data())
           .then(userInfo => {
-            const { categorie } = userInfo;
-            if (categorie === 0) {
+            const { allowed } = userInfo;
+            if (allowed) {
               navigation.navigate("CommonApp");
-            } else if (categorie === 1) {
-              navigation.navigate("ChefApp");
+            } else {
+              Auth.signOut();
+              navigation.navigate("Auth");
             }
           });
       } else {

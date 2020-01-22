@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, Alert, ToastAndroid, View } from "react-native";
+import { StyleSheet, Alert, ToastAndroid, View, KeyboardAvoidingView } from "react-native";
 import { Input, Button, Text, Icon } from "react-native-elements";
 import { TextInputMask } from "react-native-masked-text";
 import validator from "validator";
@@ -43,7 +43,7 @@ class Signup extends PureComponent {
         .then(userData => {
           userData.user.updateProfile({ displayName: name }).then(() => {
             Users.doc(userData.user.uid)
-              .set({ email, name, id, categorie: 0 })
+              .set({ email, name, id, categorie: 0, allowed: true })
               .then(() => {
                 ToastAndroid.show("Usuario agregado exitosamente", ToastAndroid.SHORT);
               });
@@ -74,7 +74,7 @@ class Signup extends PureComponent {
 
     return (
       <View style={OuterStyle}>
-        <View style={InnerStyle}>
+        <KeyboardAvoidingView behavior="height" style={InnerStyle}>
           <Text h4 style={{ color: "white", marginBottom: 10 }}>
             Por favor llena estos datos.
           </Text>
@@ -129,7 +129,7 @@ class Signup extends PureComponent {
           />
 
           <Button title="Crear cuenta" containerStyle={ButtonStyle} onPress={handleSignup} />
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }

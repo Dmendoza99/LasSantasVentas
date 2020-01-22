@@ -9,7 +9,7 @@ import harddrink from "../../assets/photos/harddrink.png";
 import hotdrink from "../../assets/photos/hotdrink.png";
 import dessert from "../../assets/photos/dessert.png";
 import extra from "../../assets/photos/extra.png";
-import { Products } from "../firebase";
+import { Products, Auth } from "../firebase";
 
 class CreateProducts extends PureComponent {
   constructor(props) {
@@ -54,7 +54,7 @@ class CreateProducts extends PureComponent {
           <View style={{ flex: 1 }}>
             <Input
               label="Nombre"
-              placeholder="Baleado"
+              placeholder="Baleada"
               onChangeText={text => {
                 this.setState({ name: text });
               }}
@@ -93,11 +93,13 @@ class CreateProducts extends PureComponent {
                   text: "OK",
                   onPress: () => {
                     const product = { name, price: Number.parseFloat(price), categorie };
-                    if (!validator.isEmpty(product.name)) {
-                      Products.add(product).then(() => {
-                        this.setState({ name: "", price: "", categorie: 0 });
-                        ToastAndroid.show("Producto agregado con exito", ToastAndroid.SHORT);
-                      });
+                    if (!validator.isEmpty(product.name) && Auth.currentUser !== null) {
+                      Products(Auth.currentUser.uid)
+                        .add(product)
+                        .then(() => {
+                          this.setState({ name: "", price: "", categorie: 0 });
+                          ToastAndroid.show("Producto agregado con exito", ToastAndroid.SHORT);
+                        });
                     } else {
                       ToastAndroid.show(
                         "Ocurrio un error, los datos deben estar llenos",

@@ -1,5 +1,11 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, TouchableOpacity, ToastAndroid, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  ToastAndroid,
+  View,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Input, Icon, Button, Text, Avatar } from "react-native-elements";
 import { Auth } from "../firebase";
 import { theme } from "../Constants";
@@ -57,7 +63,7 @@ class Login extends PureComponent {
 
     return (
       <View style={OuterStyle}>
-        <View style={InnerStyle}>
+        <KeyboardAvoidingView behavior="height" style={InnerStyle}>
           <View style={{ alignItems: "center", marginBottom: 20 }}>
             <Avatar
               source={icon}
@@ -65,7 +71,6 @@ class Login extends PureComponent {
               size="xlarge"
             />
           </View>
-
           <Input
             placeholder="Email"
             label="Email"
@@ -95,7 +100,7 @@ class Login extends PureComponent {
             }}>
             <Text style={textStyle}>No tengo cuenta</Text>
           </TouchableOpacity>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   }

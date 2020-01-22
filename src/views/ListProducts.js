@@ -71,8 +71,19 @@ class ListProducts extends PureComponent {
       <View style={{ flex: 1, padding: 5 }}>
         {products.length > 0 ? (
           <FlatList
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={item => item.id}
             data={products}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    width: "100%",
+                    backgroundColor: "#00000009",
+                  }}
+                />
+              );
+            }}
             renderItem={({ item }) => {
               return (
                 <ListItem
@@ -120,16 +131,18 @@ class ListProducts extends PureComponent {
                         {
                           text: "OK",
                           onPress: () => {
-                            Products(Auth.currentUser.uid)
-                              .doc(item.id)
-                              .delete()
-                              .then(() => {
-                                ToastAndroid.show(
-                                  "Producto eliminado con exito",
-                                  ToastAndroid.SHORT
-                                );
-                                this.getAllProducts();
-                              });
+                            if (Auth.currentUser !== null) {
+                              Products(Auth.currentUser.uid)
+                                .doc(item.id)
+                                .delete()
+                                .then(() => {
+                                  ToastAndroid.show(
+                                    "Producto eliminado con exito",
+                                    ToastAndroid.SHORT
+                                  );
+                                  this.getAllProducts();
+                                });
+                            }
                           },
                         },
                       ]);
@@ -232,20 +245,22 @@ class ListProducts extends PureComponent {
                   {
                     text: "OK",
                     onPress: () => {
-                      Products(Auth.currentUser.uid)
-                        .doc(id)
-                        .update({ name, price, categorie })
-                        .then(() => {
-                          this.setState({
-                            showEdit: false,
-                            name: "",
-                            id: "",
-                            price: 0,
-                            categorie: 0,
+                      if (Auth.currentUser !== null) {
+                        Products(Auth.currentUser.uid)
+                          .doc(id)
+                          .update({ name, price, categorie })
+                          .then(() => {
+                            this.setState({
+                              showEdit: false,
+                              name: "",
+                              id: "",
+                              price: 0,
+                              categorie: 0,
+                            });
+                            ToastAndroid.show("Producto actualizado con exito", ToastAndroid.SHORT);
+                            this.getAllProducts();
                           });
-                          ToastAndroid.show("Producto actualizado con exito", ToastAndroid.SHORT);
-                          this.getAllProducts();
-                        });
+                      }
                     },
                   },
                 ]);

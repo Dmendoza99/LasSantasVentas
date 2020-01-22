@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { FlatList, Alert } from "react-native";
+import { FlatList, Alert, View } from "react-native";
 import { ListItem } from "react-native-elements";
 import { NavigationActions } from "react-navigation";
 import { Auth } from "../firebase";
@@ -58,6 +58,17 @@ class Settings extends PureComponent {
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         data={list}
+        ItemSeparatorComponent={() => {
+          return (
+            <View
+              style={{
+                height: 1,
+                width: "100%",
+                backgroundColor: "#00000009",
+              }}
+            />
+          );
+        }}
         renderItem={({ item }) => (
           <ListItem
             onPress={item.onPress}

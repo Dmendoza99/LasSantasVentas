@@ -40,15 +40,17 @@ class Sale extends PureComponent {
   }
 
   componentDidMount = () => {
-    Products(Auth.currentUser.uid)
-      .get()
-      .then(querySnap => {
-        const products = [];
-        querySnap.forEach(doc => {
-          products.push({ ...doc.data(), count: 0, id: doc.id });
+    if (Auth.currentUser !== null) {
+      Products(Auth.currentUser.uid)
+        .get()
+        .then(querySnap => {
+          const products = [];
+          querySnap.forEach(doc => {
+            products.push({ ...doc.data(), count: 0, id: doc.id });
+          });
+          this.setState({ products, backupProducts: products });
         });
-        this.setState({ products, backupProducts: products });
-      });
+    }
   };
 
   componentDidUpdate = prevProps => {
@@ -86,13 +88,28 @@ class Sale extends PureComponent {
     } = this.state;
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
+    // const updateData = (index,number)=>{
+
+    // }
+
     return (
       <View style={{ flex: 1, padding: 10 }}>
         <View style={flatlistContainer}>
           {products.length > 0 ? (
             <FlatList
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={item => item.id}
               data={products}
+              ItemSeparatorComponent={() => {
+                return (
+                  <View
+                    style={{
+                      height: 1,
+                      width: "100%",
+                      backgroundColor: "#00000009",
+                    }}
+                  />
+                );
+              }}
               renderItem={({ item }) => (
                 <ListItem
                   bottomDivider
@@ -241,28 +258,30 @@ class Sale extends PureComponent {
                       {
                         text: "OK",
                         onPress: () => {
-                          if (update) {
-                            delete order.date;
-                            Orders(Auth.currentUser.uid)
-                              .child(updatekey)
-                              .update({ ...order })
-                              .then(() => {
-                                this.setState({ update: false, updatekey: "" });
-                                navigation.setParams({ selectedOrder: "shit" });
-                                ToastAndroid.show(
-                                  "La orden se ha actualizado con exito",
-                                  ToastAndroid.SHORT
-                                );
-                              });
-                          } else {
-                            Orders(Auth.currentUser.uid)
-                              .push(order)
-                              .then(() => {
-                                ToastAndroid.show(
-                                  "La orden se ha publicado con exito",
-                                  ToastAndroid.SHORT
-                                );
-                              });
+                          if (Auth.currentUser !== null) {
+                            if (update) {
+                              delete order.date;
+                              Orders(Auth.currentUser.uid)
+                                .child(updatekey)
+                                .update({ ...order })
+                                .then(() => {
+                                  this.setState({ update: false, updatekey: "" });
+                                  navigation.setParams({ selectedOrder: "shit" });
+                                  ToastAndroid.show(
+                                    "La orden se ha actualizado con exito",
+                                    ToastAndroid.SHORT
+                                  );
+                                });
+                            } else {
+                              Orders(Auth.currentUser.uid)
+                                .push(order)
+                                .then(() => {
+                                  ToastAndroid.show(
+                                    "La orden se ha publicado con exito",
+                                    ToastAndroid.SHORT
+                                  );
+                                });
+                            }
                           }
                         },
                       },

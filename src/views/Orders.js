@@ -60,7 +60,9 @@ class Orders extends PureComponent {
   };
 
   componentWillUnmount = () => {
-    OrdersDB(Auth.currentUser.uid).off("value");
+    if (Auth.currentUser !== null) {
+      OrdersDB(Auth.currentUser.uid).off("value");
+    }
   };
 
   render() {
@@ -84,8 +86,19 @@ class Orders extends PureComponent {
         <ButtonGroup onPress={updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
         {filterredOrders.length > 0 ? (
           <FlatList
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={item => item.key}
             data={filterredOrders}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    width: "100%",
+                    backgroundColor: "#00000009",
+                  }}
+                />
+              );
+            }}
             renderItem={({ item }) => {
               let total = Object.values(item.items).reduce((acc, { price, count }) => {
                 return acc + price * count;
@@ -115,15 +128,20 @@ class Orders extends PureComponent {
                                 {
                                   text: "OK",
                                   onPress: () => {
-                                    OrdersDB(Auth.currentUser.uid)
-                                      .child(item.key)
-                                      .update({ active: false, closingDate: new Date().getTime() })
-                                      .then(() => {
-                                        ToastAndroid.show(
-                                          "Orden Cerrada Exitosamente",
-                                          ToastAndroid.SHORT
-                                        );
-                                      });
+                                    if (Auth.currentUser !== null) {
+                                      OrdersDB(Auth.currentUser.uid)
+                                        .child(item.key)
+                                        .update({
+                                          active: false,
+                                          closingDate: new Date().getTime(),
+                                        })
+                                        .then(() => {
+                                          ToastAndroid.show(
+                                            "Orden Cerrada Exitosamente",
+                                            ToastAndroid.SHORT
+                                          );
+                                        });
+                                    }
                                   },
                                 },
                               ],
@@ -144,12 +162,14 @@ class Orders extends PureComponent {
                       {
                         text: "OK",
                         onPress: () => {
-                          OrdersDB(Auth.currentUser.uid)
-                            .child(item.key)
-                            .remove()
-                            .then(() => {
-                              ToastAndroid.show("Orden Eliminada con exito", ToastAndroid.SHORT);
-                            });
+                          if (Auth.currentUser !== null) {
+                            OrdersDB(Auth.currentUser.uid)
+                              .child(item.key)
+                              .remove()
+                              .then(() => {
+                                ToastAndroid.show("Orden Eliminada con exito", ToastAndroid.SHORT);
+                              });
+                          }
                         },
                       },
                     ]);
@@ -188,8 +208,7 @@ class Orders extends PureComponent {
             padding: 25,
           }}
           animationType="fade"
-          animated
-          >
+          animated>
           <Text h5>{`Orden: ${selectedOrder.key}`}</Text>
           <Text h5>
             {/* eslint-disable-next-line max-len */}
@@ -202,8 +221,19 @@ class Orders extends PureComponent {
             <Text h5>{`Descuento: ${selectedOrder.discount}%`}</Text>
           ) : null}
           <FlatList
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={item => item.key}
             data={Object.values(selectedOrder.items)}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: 1,
+                    width: "100%",
+                    backgroundColor: "#00000009",
+                  }}
+                />
+              );
+            }}
             renderItem={({ item }) => {
               return (
                 <ListItem
