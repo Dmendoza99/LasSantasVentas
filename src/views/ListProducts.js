@@ -170,7 +170,9 @@ class ListProducts extends PureComponent {
           onBackdropPress={() => {
             this.setState({ showEdit: false });
           }}
-          overlayStyle={{ height: "auto", padding: 40 }}>
+          overlayStyle={{ height: "auto", padding: 40 }}
+          animationType="fade"
+          animated>
           <View style={{ flexDirection: "row" }}>
             <Avatar
               source={sourceEdit}
@@ -209,6 +211,19 @@ class ListProducts extends PureComponent {
           </View>
           <View style={{ flexDirection: "row", paddingTop: 5 }}>
             <Button
+              title="Cancelar"
+              containerStyle={{ flex: 1, paddingHorizontal: 2 }}
+              onPress={() => {
+                this.setState({
+                  showEdit: false,
+                  name: "",
+                  id: "",
+                  price: 0,
+                  categorie: 0,
+                });
+              }}
+            />
+            <Button
               title="OK"
               containerStyle={{ flex: 1, paddingHorizontal: 2 }}
               onPress={() => {
@@ -234,19 +249,6 @@ class ListProducts extends PureComponent {
                     },
                   },
                 ]);
-              }}
-            />
-            <Button
-              title="Cancelar"
-              containerStyle={{ flex: 1, paddingHorizontal: 2 }}
-              onPress={() => {
-                this.setState({
-                  showEdit: false,
-                  name: "",
-                  id: "",
-                  price: 0,
-                  categorie: 0,
-                });
               }}
             />
           </View>

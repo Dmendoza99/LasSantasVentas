@@ -87,10 +87,9 @@ class Orders extends PureComponent {
             keyExtractor={(item, index) => index.toString()}
             data={filterredOrders}
             renderItem={({ item }) => {
-              let total = 0;
-              Object.keys(item.items).map(
-                val => (total += item.items[val].price * item.items[val].count)
-              );
+              let total = Object.values(item.items).reduce((acc, { price, count }) => {
+                return acc + price * count;
+              }, 0);
               total *= (100 - item.discount) / 100;
               return (
                 <ListItem
@@ -187,7 +186,10 @@ class Orders extends PureComponent {
             height: "auto",
             maxHeight: Dimensions.get("screen").height * 0.5,
             padding: 25,
-          }}>
+          }}
+          animationType="fade"
+          animated
+          >
           <Text h5>{`Orden: ${selectedOrder.key}`}</Text>
           <Text h5>
             {/* eslint-disable-next-line max-len */}

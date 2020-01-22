@@ -205,11 +205,18 @@ class Sale extends PureComponent {
           />
           <View style={{ flexDirection: "row", paddingTop: 5 }}>
             <Button
+              title="Cancelar"
+              containerStyle={{ paddingHorizontal: 2, flex: 1 }}
+              onPress={() => {
+                this.setState({ comment: "", showComment: false });
+              }}
+            />
+            <Button
               title="OK"
               containerStyle={{ paddingHorizontal: 2, flex: 1 }}
               onPress={() => {
                 const items = products.filter(value => value.count > 0);
-                if (items.length > 0) {
+                if (items.length !== 0) {
                   const order = {
                     items,
                     comment,
@@ -218,8 +225,6 @@ class Sale extends PureComponent {
                     saleDate: new Date().getTime(),
                     sellerUID: Auth.currentUser.uid,
                     discount: Number.parseInt(descuento === "" ? "0" : descuento, 10),
-                    /* debo ver que pedo aqui por que creo que necesito guardar el numero, 
-                     de descuento, no el multiplo del total (para poder editar) */
                   };
                   if (validator.isEmpty(order.owner)) {
                     Alert.alert("Error", "Por favor llene el campo dueño");
@@ -277,13 +282,6 @@ class Sale extends PureComponent {
                 }
               }}
             />
-            <Button
-              title="Cancelar"
-              containerStyle={{ paddingHorizontal: 2, flex: 1 }}
-              onPress={() => {
-                this.setState({ comment: "", showComment: false });
-              }}
-            />
           </View>
         </Overlay>
         <View style={ParallelButtonContainer}>
@@ -291,24 +289,29 @@ class Sale extends PureComponent {
             title="Cancelar"
             containerStyle={ButtonContainer}
             onPress={() => {
-              Alert.alert("Confirmacion", "Seguro queres cancelar la orden?", [
-                { text: "Cancelar" },
-                {
-                  text: "OK",
-                  onPress: () => {
-                    this.setState({
-                      products: backupProducts,
-                      comment: "",
-                      update: false,
-                      updatekey: "",
-                      owner: "",
-                      descuento: "",
-                    });
-                    navigation.setParams({ selectedOrder: "shit" });
-                    ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);
+              const itemsCount = products.filter(value => value.count > 0).length;
+              if (itemsCount !== 0) {
+                Alert.alert("Confirmacion", "Seguro queres cancelar la orden?", [
+                  { text: "Cancelar" },
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      this.setState({
+                        products: backupProducts,
+                        comment: "",
+                        update: false,
+                        updatekey: "",
+                        owner: "",
+                        descuento: "",
+                      });
+                      navigation.setParams({ selectedOrder: "shit" });
+                      ToastAndroid.show("La orden se ha cancelado con exito", ToastAndroid.SHORT);
+                    },
                   },
-                },
-              ]);
+                ]);
+              } else {
+                ToastAndroid.show("No se puede cancelar una orden vacia", ToastAndroid.SHORT);
+              }
             }}
           />
           <Button
