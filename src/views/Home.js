@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, ToastAndroid } from "react-native";
 import { Text } from "react-native-elements";
-import { BarChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 import { Orders, Auth } from "../firebase";
 
 const style = StyleSheet.create({
@@ -60,7 +60,7 @@ class Home extends PureComponent {
         let total = Object.values(order.items).reduce((acc, { price, count }) => {
           return acc + price * count;
         }, 0);
-        total -= total * order.discount;
+        total -= total * (order.discount / 100);
         if (month in reportMonths) {
           reportMonths[month] += total;
         }
@@ -80,8 +80,16 @@ class Home extends PureComponent {
       <View style={{ padding: 10 }}>
         <Text h4>Ventas de los ultimos 3 meses</Text>
         <Text h6>En lempiras</Text>
-        <BarChart
+        <LineChart
           fromZero
+          bezier
+          onDataPointClick={data => {
+            const { index, dataset } = data;
+            ToastAndroid.show(
+              `El valor es de ${dataset.data[index].toFixed(2)}`,
+              ToastAndroid.SHORT
+            );
+          }}
           data={getWeekReport()}
           width={Dimensions.get("window").width}
           height={Dimensions.get("window").height * 0.75}
