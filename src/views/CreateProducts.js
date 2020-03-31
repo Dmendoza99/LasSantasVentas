@@ -2,13 +2,7 @@ import React, { PureComponent } from "react";
 import { View, Picker, Alert, ToastAndroid } from "react-native";
 import { Button, Input, Avatar } from "react-native-elements";
 import validator from "validator";
-import { categories } from "../Constants";
-import meal from "../../assets/photos/food.png";
-import softdrink from "../../assets/photos/softdrink.png";
-import harddrink from "../../assets/photos/harddrink.png";
-import hotdrink from "../../assets/photos/hotdrink.png";
-import dessert from "../../assets/photos/dessert.png";
-import extra from "../../assets/photos/extra.png";
+import { categories, categoriesPhotos } from "../Constants";
 import { Products, Auth } from "../firebase";
 
 class CreateProducts extends PureComponent {
@@ -20,29 +14,7 @@ class CreateProducts extends PureComponent {
 
   render() {
     const { categorie, price, name } = this.state;
-    let source;
-    switch (categorie) {
-      case 0:
-        source = meal;
-        break;
-      case 1:
-        source = softdrink;
-        break;
-      case 2:
-        source = harddrink;
-        break;
-      case 3:
-        source = hotdrink;
-        break;
-      case 4:
-        source = dessert;
-        break;
-      case 5:
-        source = extra;
-        break;
-      default:
-        break;
-    }
+    const source = categoriesPhotos[categorie];
     return (
       <View style={{ flex: 1, padding: 5 }}>
         <View style={{ flex: 6, flexDirection: "row", padding: 10 }}>

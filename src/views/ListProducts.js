@@ -1,14 +1,8 @@
 import React, { PureComponent } from "react";
 import { View, FlatList, Alert, ToastAndroid, ActivityIndicator, Picker } from "react-native";
 import { ListItem, Avatar, Icon, Text, Overlay, Input, Button } from "react-native-elements";
-import { theme, categories } from "../Constants";
+import { theme, categories, categoriesPhotos } from "../Constants";
 import { Products, Auth } from "../firebase";
-import meal from "../../assets/photos/food.png";
-import softdrink from "../../assets/photos/softdrink.png";
-import harddrink from "../../assets/photos/harddrink.png";
-import hotdrink from "../../assets/photos/hotdrink.png";
-import dessert from "../../assets/photos/dessert.png";
-import extra from "../../assets/photos/extra.png";
 
 class ListProducts extends PureComponent {
   constructor(props) {
@@ -20,6 +14,7 @@ class ListProducts extends PureComponent {
       name: "",
       categorie: 0,
       id: "",
+      query: "",
     };
   }
 
@@ -42,132 +37,119 @@ class ListProducts extends PureComponent {
   };
 
   render() {
-    const { products, showEdit, price, name, categorie, id } = this.state;
-    let sourceEdit;
+    const { products, showEdit, price, name, categorie, id, query } = this.state;
+    const sourceEdit = categoriesPhotos[categorie];
 
-    switch (categorie) {
-      case 0:
-        sourceEdit = meal;
-        break;
-      case 1:
-        sourceEdit = softdrink;
-        break;
-      case 2:
-        sourceEdit = harddrink;
-        break;
-      case 3:
-        sourceEdit = hotdrink;
-        break;
-      case 4:
-        sourceEdit = dessert;
-        break;
-      case 5:
-        sourceEdit = extra;
-        break;
-      default:
-        break;
-    }
     return (
       <View style={{ flex: 1, padding: 5 }}>
+        <Input
+          placeholder="Busqueda"
+          value={query}
+          rightIcon={{ name: "magnify", type: "material-community", color: theme.colors.secondar }}
+          onChangeText={text => {
+            this.setState({ query: text });
+          }}
+        />
         {products.length > 0 ? (
           <FlatList
             keyExtractor={item => item.id}
             data={products}
-            ItemSeparatorComponent={() => {
-              return (
-                <View
-                  style={{
-                    height: 1,
-                    width: "100%",
-                    backgroundColor: "#00000009",
-                  }}
-                />
+            ItemSeparatorComponent={({ leadingItem }) => {
+              const searchRegex = new RegExp(
+                query
+                  .toLowerCase()
+                  .split(/ /)
+                  .filter(l => l !== "")
+                  .join("|"),
+                "i"
               );
+              const r1 = leadingItem.name.toLowerCase().search(searchRegex);
+              if (r1 !== -1 && query.length >= 0) {
+                return (
+                  <View
+                    style={{
+                      height: 1,
+                      width: "100%",
+                      backgroundColor: "#00000009",
+                    }}
+                  />
+                );
+              }
+              return <></>;
             }}
             renderItem={({ item }) => {
-              return (
-                <ListItem
-                  key={item.id}
-                  title={item.name}
-                  subtitle={`L. ${item.price.toFixed(2)}`}
-                  leftAvatar={() => {
-                    let source;
-                    switch (item.categorie) {
-                      case 0:
-                        source = meal;
-                        break;
-                      case 1:
-                        source = softdrink;
-                        break;
-                      case 2:
-                        source = harddrink;
-                        break;
-                      case 3:
-                        source = hotdrink;
-                        break;
-                      case 4:
-                        source = dessert;
-                        break;
-                      case 5:
-                        source = extra;
-                        break;
-                      default:
-                        break;
-                    }
-                    return (
-                      <Avatar
-                        source={source}
-                        overlayContainerStyle={{ backgroundColor: "white" }}
-                        size="medium"
-                      />
-                    );
-                  }}
-                  rightIcon={{
-                    name: "delete",
-                    type: "material-community",
-                    onPress: () => {
-                      Alert.alert("Confirmacion", "Seguro queres borrar este producto?", [
-                        { text: "Cancelar" },
-                        {
-                          text: "OK",
-                          onPress: () => {
-                            if (Auth.currentUser !== null) {
-                              Products(Auth.currentUser.uid)
-                                .doc(item.id)
-                                .delete()
-                                .then(() => {
-                                  ToastAndroid.show(
-                                    "Producto eliminado con exito",
-                                    ToastAndroid.SHORT
-                                  );
-                                  this.getAllProducts();
-                                });
-                            }
-                          },
-                        },
-                      ]);
-                    },
-                  }}
-                  rightTitle={
-                    // eslint-disable-next-line react/jsx-wrap-multilines
-                    <Icon
-                      name="pencil"
-                      color="rgba(0,0,0,0.54)"
-                      onPress={() => {
-                        this.setState({
-                          showEdit: true,
-                          name: item.name,
-                          price: item.price,
-                          id: item.id,
-                          categorie: item.categorie,
-                        });
-                      }}
-                      type="material-community"
-                    />
-                  }
-                  bottomDivider
-                />
+              const searchRegex = new RegExp(
+                query
+                  .toLowerCase()
+                  .split(/ /)
+                  .filter(l => l !== "")
+                  .join("|"),
+                "i"
               );
+              const r1 = item.name.toLowerCase().search(searchRegex);
+              if (r1 !== -1 && query.length >= 0) {
+                return (
+                  <ListItem
+                    key={item.id}
+                    title={item.name}
+                    subtitle={`L. ${item.price.toFixed(2)}`}
+                    leftAvatar={() => {
+                      const source = categoriesPhotos[item.categorie];
+                      return (
+                        <Avatar
+                          source={source}
+                          overlayContainerStyle={{ backgroundColor: "white" }}
+                          size="medium"
+                        />
+                      );
+                    }}
+                    rightIcon={{
+                      name: "delete",
+                      type: "material-community",
+                      onPress: () => {
+                        Alert.alert("Confirmacion", "Seguro queres borrar este producto?", [
+                          { text: "Cancelar" },
+                          {
+                            text: "OK",
+                            onPress: () => {
+                              if (Auth.currentUser !== null) {
+                                Products(Auth.currentUser.uid)
+                                  .doc(item.id)
+                                  .delete()
+                                  .then(() => {
+                                    ToastAndroid.show(
+                                      "Producto eliminado con exito",
+                                      ToastAndroid.SHORT
+                                    );
+                                    this.getAllProducts();
+                                  });
+                              }
+                            },
+                          },
+                        ]);
+                      },
+                    }}
+                    rightTitle={
+                      // eslint-disable-next-line react/jsx-wrap-multilines
+                      <Icon
+                        name="pencil"
+                        color="rgba(0,0,0,0.54)"
+                        onPress={() => {
+                          this.setState({
+                            showEdit: true,
+                            name: item.name,
+                            price: item.price,
+                            id: item.id,
+                            categorie: item.categorie,
+                          });
+                        }}
+                        type="material-community"
+                      />
+                    }
+                    bottomDivider
+                  />
+                );
+              }
             }}
           />
         ) : (

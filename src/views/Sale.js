@@ -3,13 +3,7 @@ import { Button, ListItem, Avatar, Text, Input, Overlay } from "react-native-ele
 import { StyleSheet, View, FlatList, ActivityIndicator, Alert, ToastAndroid } from "react-native";
 import { withNavigationFocus } from "react-navigation";
 import validator from "validator";
-import meal from "../../assets/photos/food.png";
-import softdrink from "../../assets/photos/softdrink.png";
-import harddrink from "../../assets/photos/harddrink.png";
-import hotdrink from "../../assets/photos/hotdrink.png";
-import dessert from "../../assets/photos/dessert.png";
-import extra from "../../assets/photos/extra.png";
-import { theme } from "../Constants";
+import { theme, categoriesPhotos } from "../Constants";
 import { Products, Orders, Auth } from "../firebase";
 
 const styles = StyleSheet.create({
@@ -36,6 +30,7 @@ class Sale extends PureComponent {
       updatekey: "",
       owner: "",
       descuento: "",
+      query: "",
     };
   }
 
@@ -85,6 +80,7 @@ class Sale extends PureComponent {
       updatekey,
       owner,
       descuento,
+      query,
     } = this.state;
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
@@ -94,95 +90,106 @@ class Sale extends PureComponent {
 
     return (
       <View style={{ flex: 1, padding: 10 }}>
+        <Input
+          placeholder="Busqueda"
+          value={query}
+          rightIcon={{ name: "magnify", type: "material-community", color: theme.colors.secondar }}
+          onChangeText={text => {
+            this.setState({ query: text });
+          }}
+        />
         <View style={flatlistContainer}>
           {products.length > 0 ? (
             <FlatList
               keyExtractor={item => item.id}
               data={products}
-              ItemSeparatorComponent={() => {
-                return (
-                  <View
-                    style={{
-                      height: 1,
-                      width: "100%",
-                      backgroundColor: "#00000009",
-                    }}
-                  />
+              ItemSeparatorComponent={({ leadingItem }) => {
+                const searchRegex = new RegExp(
+                  query
+                    .toLowerCase()
+                    .split(/ /)
+                    .filter(l => l !== "")
+                    .join("|"),
+                  "i"
                 );
+                const r1 = leadingItem.name.toLowerCase().search(searchRegex);
+                if (r1 !== -1 && query.length >= 0) {
+                  return (
+                    <View
+                      style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#00000009",
+                      }}
+                    />
+                  );
+                }
+                return <></>;
               }}
-              renderItem={({ item }) => (
-                <ListItem
-                  bottomDivider
-                  title={item.name}
-                  leftIcon={{
-                    name: "minus",
-                    type: "material-community",
-                    reverse: true,
-                    reverseColor: "white",
-                    color: theme.colors.secondary,
-                    size: 20,
-                    onPress: () => {
-                      this.setState({
-                        products: products.map(food => ({
-                          ...food,
-                          count: food === item && food.count > 0 ? food.count - 1 : food.count,
-                        })),
-                      });
-                    },
-                  }}
-                  rightIcon={{
-                    name: "plus",
-                    type: "material-community",
-                    reverse: true,
-                    reverseColor: "white",
-                    color: theme.colors.secondary,
-                    size: 20,
-                    onPress: () => {
-                      this.setState({
-                        products: products.map(food => ({
-                          ...food,
-                          count: food === item ? food.count + 1 : food.count,
-                        })),
-                      });
-                    },
-                  }}
-                  rightTitle={`${item.count}`}
-                  leftAvatar={() => {
-                    let source;
+              renderItem={({ item }) => {
+                const searchRegex = new RegExp(
+                  query
+                    .toLowerCase()
+                    .split(/ /)
+                    .filter(l => l !== "")
+                    .join("|"),
+                  "i"
+                );
+                const r1 = item.name.toLowerCase().search(searchRegex);
+                if (r1 !== -1 && query.length >= 0) {
+                  return (
+                    <ListItem
+                      bottomDivider
+                      title={item.name}
+                      leftIcon={{
+                        name: "minus",
+                        type: "material-community",
+                        reverse: true,
+                        reverseColor: "white",
+                        color: theme.colors.secondary,
+                        size: 20,
+                        onPress: () => {
+                          this.setState({
+                            products: products.map(food => ({
+                              ...food,
+                              count: food === item && food.count > 0 ? food.count - 1 : food.count,
+                            })),
+                          });
+                        },
+                      }}
+                      rightIcon={{
+                        name: "plus",
+                        type: "material-community",
+                        reverse: true,
+                        reverseColor: "white",
+                        color: theme.colors.secondary,
+                        size: 20,
+                        onPress: () => {
+                          this.setState({
+                            products: products.map(food => ({
+                              ...food,
+                              count: food === item ? food.count + 1 : food.count,
+                            })),
+                          });
+                        },
+                      }}
+                      rightTitle={`${item.count}`}
+                      leftAvatar={() => {
+                        const source = categoriesPhotos[item.categorie];
 
-                    switch (item.categorie) {
-                      case 0:
-                        source = meal;
-                        break;
-                      case 1:
-                        source = softdrink;
-                        break;
-                      case 2:
-                        source = harddrink;
-                        break;
-                      case 3:
-                        source = hotdrink;
-                        break;
-                      case 4:
-                        source = dessert;
-                        break;
-                      case 5:
-                        source = extra;
-                        break;
-                      default:
-                        break;
-                    }
-                    return (
-                      <Avatar
-                        source={source}
-                        overlayContainerStyle={{ backgroundColor: "white" }}
-                        size="medium"
-                      />
-                    );
-                  }}
-                  subtitle={`L. ${item.price.toFixed(2)}`}
-                />
-              )}
+                        return (
+                          <Avatar
+                            source={source}
+                            overlayContainerStyle={{ backgroundColor: "white" }}
+                            size="medium"
+                          />
+                        );
+                      }}
+                      subtitle={`L. ${item.price.toFixed(2)}`}
+                    />
+                  );
+                }
+              }}
             />
           ) : (
             <View>
