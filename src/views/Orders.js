@@ -8,6 +8,7 @@ import {
   Alert,
   StyleSheet,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import validator from "validator";
 import { Orders as OrdersDB, Auth } from "../firebase";
@@ -76,7 +77,7 @@ class Orders extends PureComponent {
     const saleDate = new Date(selectedOrder.saleDate);
 
     return (
-      <View style={{ flex: 1, padding: 5 }}>
+      <View style={{ flex: 1, padding: 5, paddingTop: StatusBar.currentHeight + 5 }}>
         <ButtonGroup onPress={updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
         {filterredOrders.length > 0 ? (
           <FlatList

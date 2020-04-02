@@ -1,5 +1,13 @@
 import React, { PureComponent } from "react";
-import { View, FlatList, Alert, ToastAndroid, ActivityIndicator, Picker } from "react-native";
+import {
+  View,
+  FlatList,
+  Alert,
+  ToastAndroid,
+  ActivityIndicator,
+  Picker,
+  StatusBar,
+} from "react-native";
 import { ListItem, Avatar, Icon, Text, Overlay, Input, Button } from "react-native-elements";
 import { theme, categories, categoriesPhotos } from "../Constants";
 import { Products, Auth } from "../firebase";
@@ -41,7 +49,7 @@ class ListProducts extends PureComponent {
     const sourceEdit = categoriesPhotos[categorie];
 
     return (
-      <View style={{ flex: 1, padding: 5 }}>
+      <View style={{ flex: 1, padding: 5, paddingTop: StatusBar.currentHeight + 5 }}>
         <Input
           placeholder="Busqueda"
           value={query}

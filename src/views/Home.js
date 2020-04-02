@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Dimensions, StyleSheet, View, ToastAndroid } from "react-native";
+import { Dimensions, StyleSheet, View, ToastAndroid, StatusBar } from "react-native";
 import { Text } from "react-native-elements";
 import { LineChart } from "react-native-chart-kit";
 import { Orders, Auth } from "../firebase";
@@ -77,7 +77,7 @@ class Home extends PureComponent {
 
     const { chart } = style;
     return (
-      <View style={{ padding: 10 }}>
+      <View style={{ padding: 10, paddingTop: StatusBar.currentHeight + 10 }}>
         <Text h4>Ventas de los ultimos 3 meses</Text>
         <Text h6>En lempiras</Text>
         <LineChart

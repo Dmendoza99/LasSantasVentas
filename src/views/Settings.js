@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { FlatList, Alert, View } from "react-native";
+import { FlatList, Alert, View, StatusBar } from "react-native";
 import { ListItem } from "react-native-elements";
 import { NavigationActions } from "react-navigation";
 import { Auth } from "../firebase";
@@ -56,6 +56,7 @@ class Settings extends PureComponent {
 
     return (
       <FlatList
+        style={{ paddingTop: StatusBar.currentHeight }}
         keyExtractor={(item, index) => index.toString()}
         data={list}
         ItemSeparatorComponent={() => {

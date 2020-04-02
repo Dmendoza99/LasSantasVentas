@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Picker, Alert, ToastAndroid } from "react-native";
+import { View, Picker, Alert, ToastAndroid, StatusBar } from "react-native";
 import { Button, Input, Avatar } from "react-native-elements";
 import validator from "validator";
 import { categories, categoriesPhotos } from "../Constants";
@@ -16,7 +16,7 @@ class CreateProducts extends PureComponent {
     const { categorie, price, name } = this.state;
     const source = categoriesPhotos[categorie];
     return (
-      <View style={{ flex: 1, padding: 5 }}>
+      <View style={{ flex: 1, padding: 5, paddingTop: StatusBar.currentHeight + 5 }}>
         <View style={{ flex: 6, flexDirection: "row", padding: 10 }}>
           <Avatar
             source={source}

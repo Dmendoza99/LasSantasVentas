@@ -1,6 +1,14 @@
 import React, { PureComponent } from "react";
 import { Button, ListItem, Avatar, Text, Input, Overlay } from "react-native-elements";
-import { StyleSheet, View, FlatList, ActivityIndicator, Alert, ToastAndroid } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+  ToastAndroid,
+  StatusBar,
+} from "react-native";
 import { withNavigationFocus } from "react-navigation";
 import validator from "validator";
 import { theme, categoriesPhotos } from "../Constants";
@@ -89,7 +97,7 @@ class Sale extends PureComponent {
     // }
 
     return (
-      <View style={{ flex: 1, padding: 10 }}>
+      <View style={{ flex: 1, padding: 10, paddingTop: StatusBar.currentHeight + 10 }}>
         <Input
           placeholder="Busqueda"
           value={query}
