@@ -69,8 +69,9 @@ class CreateProducts extends PureComponent {
                       Products(Auth.currentUser.uid)
                         .add(product)
                         .then(() => {
-                          this.setState({ name: "", price: "", categorie: 0 });
-                          ToastAndroid.show("Producto agregado con exito", ToastAndroid.SHORT);
+                          this.setState({ name: "", price: "", categorie: 0 }, () => {
+                            ToastAndroid.show("Producto agregado con exito", ToastAndroid.SHORT);
+                          });
                         });
                     } else {
                       ToastAndroid.show(

@@ -53,7 +53,24 @@ class ListProducts extends PureComponent {
         <Input
           placeholder="Busqueda"
           value={query}
-          rightIcon={{ name: "magnify", type: "material-community", color: theme.colors.secondar }}
+          rightIcon={
+            query.length === 0
+              ? {
+                  name: "magnify",
+                  type: "material-community",
+                  color: theme.colors.secondary,
+                  size: 35,
+                }
+              : {
+                  name: "close",
+                  type: "material-community",
+                  size: 35,
+                  color: theme.colors.secondary,
+                  onPress: () => {
+                    this.setState({ query: "" });
+                  },
+                }
+          }
           onChangeText={text => {
             this.setState({ query: text });
           }}
@@ -158,6 +175,7 @@ class ListProducts extends PureComponent {
                   />
                 );
               }
+              return <></>;
             }}
           />
         ) : (

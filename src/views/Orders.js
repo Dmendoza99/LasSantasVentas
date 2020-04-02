@@ -60,16 +60,16 @@ class Orders extends PureComponent {
     }
   };
 
-  render() {
-    const updateIndex = selectedIndex => {
-      this.setState(state => ({
-        selectedIndex,
-        filterredOrders: state.orders.filter(order =>
-          selectedIndex === 0 ? order.active : !order.active
-        ),
-      }));
-    };
+  updateIndex = selectedIndex => {
+    this.setState(state => ({
+      selectedIndex,
+      filterredOrders: state.orders.filter(order =>
+        selectedIndex === 0 ? order.active : !order.active
+      ),
+    }));
+  };
 
+  render() {
     const buttons = ["Abiertas", "Cerradas"];
     const { selectedIndex, filterredOrders, orders, selectedOrder, showOrder } = this.state;
     const { navigation } = this.props;
@@ -78,7 +78,7 @@ class Orders extends PureComponent {
 
     return (
       <View style={{ flex: 1, padding: 5, paddingTop: StatusBar.currentHeight + 5 }}>
-        <ButtonGroup onPress={updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
+        <ButtonGroup onPress={this.updateIndex} selectedIndex={selectedIndex} buttons={buttons} />
         {filterredOrders.length > 0 ? (
           <FlatList
             keyExtractor={item => item.key}

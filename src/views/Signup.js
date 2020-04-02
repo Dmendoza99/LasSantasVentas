@@ -21,56 +21,60 @@ class Signup extends PureComponent {
     this.state = { email: "", password: "", name: "", id: "" };
   }
 
+  handleInput = nombre => {
+    return text => {
+      this.setState({ [nombre]: text });
+    };
+  };
+
+  handleSignup = () => {
+    const { email, password, name, id } = this.state;
+
+    if (
+      validator.isEmpty(email) ||
+      validator.isEmpty(password) ||
+      validator.isEmpty(name) ||
+      validator.isEmpty(id)
+    ) {
+      Alert.alert("Error", "Todos los campos deben estar llenos", [{ text: "Ok" }]);
+      return;
+    }
+    Auth.createUserWithEmailAndPassword(email, password)
+      .then(userData => {
+        userData.user.updateProfile({ displayName: name }).then(() => {
+          Users.doc(userData.user.uid)
+            .set({ email, name, id, categorie: 0, allowed: true })
+            .then(() => {
+              ToastAndroid.show("Usuario agregado exitosamente", ToastAndroid.SHORT);
+            });
+        });
+      })
+      .catch(error => {
+        let alert;
+        switch (error.code) {
+          case "auth/invalid-email":
+            alert = "Correo invalido";
+            break;
+          case "auth/wrong-password":
+            alert = "Contraseña incorrecta";
+            break;
+          case "auth/weak-password":
+            alert = "Contraseña invalida";
+            break;
+          case "auth/email-already-in-use":
+            alert = "correo en uso";
+            break;
+          default:
+            alert = "Hubo un error";
+            break;
+        }
+        ToastAndroid.show(alert, ToastAndroid.SHORT);
+      });
+  };
+
   render() {
     const { email, password, name, id } = this.state;
     const { OuterStyle, InnerStyle, ButtonStyle, InputStyle, IconStyle } = styles;
-    const handleInput = nombre => {
-      return text => {
-        this.setState({ [nombre]: text });
-      };
-    };
-    const handleSignup = () => {
-      if (
-        validator.isEmpty(email) ||
-        validator.isEmpty(password) ||
-        validator.isEmpty(name) ||
-        validator.isEmpty(id)
-      ) {
-        Alert.alert("Error", "Todos los campos deben estar llenos", [{ text: "Ok" }]);
-        return;
-      }
-      Auth.createUserWithEmailAndPassword(email, password)
-        .then(userData => {
-          userData.user.updateProfile({ displayName: name }).then(() => {
-            Users.doc(userData.user.uid)
-              .set({ email, name, id, categorie: 0, allowed: true })
-              .then(() => {
-                ToastAndroid.show("Usuario agregado exitosamente", ToastAndroid.SHORT);
-              });
-          });
-        })
-        .catch(error => {
-          let alert;
-          switch (error.code) {
-            case "auth/invalid-email":
-              alert = "Correo invalido";
-              break;
-            case "auth/wrong-password":
-              alert = "Contraseña incorrecta";
-              break;
-            case "auth/weak-password":
-              alert = "Contraseña invalida";
-              break;
-            case "auth/email-already-in-use":
-              alert = "correo en uso";
-              break;
-            default:
-              alert = "Hubo un error";
-              break;
-          }
-          ToastAndroid.show(alert, ToastAndroid.SHORT);
-        });
-    };
 
     return (
       <View style={OuterStyle}>
@@ -86,7 +90,7 @@ class Signup extends PureComponent {
             leftIconContainerStyle={IconStyle}
             containerStyle={InputStyle}
             value={name}
-            onChangeText={handleInput("name")}
+            onChangeText={this.handleInput("name")}
           />
           <TextInputMask
             type="custom"
@@ -103,7 +107,7 @@ class Signup extends PureComponent {
               mask: "9999-9999-99999",
             }}
             value={id}
-            onChangeText={handleInput("id")}
+            onChangeText={this.handleInput("id")}
           />
           <Input
             placeholder="Email"
@@ -114,7 +118,7 @@ class Signup extends PureComponent {
             containerStyle={InputStyle}
             leftIcon={<Icon name="email" type="material-community" size={24} color="gray" />}
             value={email}
-            onChangeText={handleInput("email")}
+            onChangeText={this.handleInput("email")}
           />
           <Input
             secureTextEntry
@@ -125,10 +129,10 @@ class Signup extends PureComponent {
             containerStyle={InputStyle}
             leftIcon={<Icon name="key" type="material-community" size={24} color="gray" />}
             value={password}
-            onChangeText={handleInput("password")}
+            onChangeText={this.handleInput("password")}
           />
 
-          <Button title="Crear cuenta" containerStyle={ButtonStyle} onPress={handleSignup} />
+          <Button title="Crear cuenta" containerStyle={ButtonStyle} onPress={this.handleSignup} />
         </KeyboardAvoidingView>
       </View>
     );

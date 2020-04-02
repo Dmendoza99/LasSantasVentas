@@ -29,52 +29,52 @@ class Home extends PureComponent {
     }
   };
 
-  render() {
-    const getWeekReport = () => {
-      const months = [
-        "Enero",
-        "Febrero",
-        "Marzo",
-        "Abril",
-        "Mayo",
-        "Junio",
-        "Julio",
-        "Agosto",
-        "Septiembre",
-        "Octubre",
-        "Noviembre",
-        "Diciembre",
-      ];
-      const { orders } = this.state;
-      const reportMonths = {};
-      const d = new Date();
-      for (let i = 0; i < 3; i += 1) {
-        reportMonths[`${months[d.getMonth()]}/${d.getFullYear().toString()}`] = 0;
-        d.setMonth(d.getMonth() - 1);
+  getReport = () => {
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    const { orders } = this.state;
+    const reportMonths = {};
+    const d = new Date();
+    for (let i = 0; i < 3; i += 1) {
+      reportMonths[`${months[d.getMonth()]}/${d.getFullYear().toString()}`] = 0;
+      d.setMonth(d.getMonth() - 1);
+    }
+
+    // eslint-disable-next-line array-callback-return
+    orders.map(order => {
+      const saleDate = new Date(order.saleDate);
+      const month = `${months[saleDate.getMonth()]}/${saleDate.getFullYear().toString()}`;
+      let total = Object.values(order.items).reduce((acc, { price, count }) => {
+        return acc + price * count;
+      }, 0);
+      total -= total * (order.discount / 100);
+      if (month in reportMonths) {
+        reportMonths[month] += total;
       }
-
-      // eslint-disable-next-line array-callback-return
-      orders.map(order => {
-        const saleDate = new Date(order.saleDate);
-        const month = `${months[saleDate.getMonth()]}/${saleDate.getFullYear().toString()}`;
-        let total = Object.values(order.items).reduce((acc, { price, count }) => {
-          return acc + price * count;
-        }, 0);
-        total -= total * (order.discount / 100);
-        if (month in reportMonths) {
-          reportMonths[month] += total;
-        }
-      });
-      return {
-        labels: [...Object.keys(reportMonths)],
-        datasets: [
-          {
-            data: [...Object.values(reportMonths)],
-          },
-        ],
-      };
+    });
+    return {
+      labels: [...Object.keys(reportMonths)],
+      datasets: [
+        {
+          data: [...Object.values(reportMonths)],
+        },
+      ],
     };
+  };
 
+  render() {
     const { chart } = style;
     return (
       <View style={{ padding: 10, paddingTop: StatusBar.currentHeight + 10 }}>
@@ -90,7 +90,7 @@ class Home extends PureComponent {
               ToastAndroid.SHORT
             );
           }}
-          data={getWeekReport()}
+          data={this.getReport()}
           width={Dimensions.get("window").width}
           height={Dimensions.get("window").height * 0.75}
           chartConfig={{

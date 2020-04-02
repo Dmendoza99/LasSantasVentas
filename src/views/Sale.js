@@ -92,16 +92,30 @@ class Sale extends PureComponent {
     } = this.state;
     const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
     const { navigation } = this.props;
-    // const updateData = (index,number)=>{
-
-    // }
 
     return (
       <View style={{ flex: 1, padding: 10, paddingTop: StatusBar.currentHeight + 10 }}>
         <Input
           placeholder="Busqueda"
           value={query}
-          rightIcon={{ name: "magnify", type: "material-community", color: theme.colors.secondar }}
+          rightIcon={
+            query.length === 0
+              ? {
+                  name: "magnify",
+                  type: "material-community",
+                  color: theme.colors.secondary,
+                  size: 35,
+                }
+              : {
+                  name: "close",
+                  type: "material-community",
+                  size: 35,
+                  color: theme.colors.secondary,
+                  onPress: () => {
+                    this.setState({ query: "" });
+                  },
+                }
+          }
           onChangeText={text => {
             this.setState({ query: text });
           }}
@@ -197,6 +211,7 @@ class Sale extends PureComponent {
                     />
                   );
                 }
+                return <></>;
               }}
             />
           ) : (

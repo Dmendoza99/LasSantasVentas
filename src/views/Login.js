@@ -34,32 +34,35 @@ class Login extends PureComponent {
     this.state = { email: "", password: "" };
   }
 
+  handleInput = name => {
+    return text => {
+      this.setState({ [name]: text });
+    };
+  };
+
+  handleLogin = () => {
+    const { email, password } = this.state;
+    Auth.signInWithEmailAndPassword(email, password).catch(error => {
+      let alert;
+      switch (error.code) {
+        case "auth/invalid-email":
+          alert = "Correo invalido";
+          break;
+        case "auth/wrong-password":
+          alert = "Contraseña incorrecta";
+          break;
+        default:
+          alert = "Hubo un error";
+          break;
+      }
+      ToastAndroid.show(alert, ToastAndroid.SHORT);
+    });
+  };
+
   render() {
     const { OuterStyle, InnerStyle, ButtonStyle, textStyle } = styles;
     const { email, password } = this.state;
     const { navigation } = this.props;
-    const handleInput = name => {
-      return text => {
-        this.setState({ [name]: text });
-      };
-    };
-    const handleLogin = () => {
-      Auth.signInWithEmailAndPassword(email, password).catch(error => {
-        let alert;
-        switch (error.code) {
-          case "auth/invalid-email":
-            alert = "Correo invalido";
-            break;
-          case "auth/wrong-password":
-            alert = "Contraseña incorrecta";
-            break;
-          default:
-            alert = "Hubo un error";
-            break;
-        }
-        ToastAndroid.show(alert, ToastAndroid.SHORT);
-      });
-    };
 
     return (
       <View style={OuterStyle}>
@@ -80,7 +83,7 @@ class Login extends PureComponent {
             containerStyle={{ backgroundColor: "white", borderRadius: 5, marginBottom: 5 }}
             leftIcon={<Icon name="email" type="material-community" size={24} color="gray" />}
             value={email}
-            onChangeText={handleInput("email")}
+            onChangeText={this.handleInput("email")}
           />
           <Input
             secureTextEntry
@@ -91,9 +94,9 @@ class Login extends PureComponent {
             containerStyle={{ backgroundColor: "white", borderRadius: 5 }}
             leftIcon={<Icon name="key" type="material-community" size={24} color="gray" />}
             value={password}
-            onChangeText={handleInput("password")}
+            onChangeText={this.handleInput("password")}
           />
-          <Button title="Iniciar Sesion" onPress={handleLogin} containerStyle={ButtonStyle} />
+          <Button title="Iniciar Sesion" onPress={this.handleLogin} containerStyle={ButtonStyle} />
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Signup");
