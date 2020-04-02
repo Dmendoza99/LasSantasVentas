@@ -3,8 +3,9 @@
     "name": "Las Santas Ventas",
     "slug": "LasSantasVentas",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": ["android"],
+    "platforms": [
+      "android"
+    ],
     "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +24,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "androidStatusBar": {
       "barStyle": "light-content",
       "backgroundColor": "#FFC107"
