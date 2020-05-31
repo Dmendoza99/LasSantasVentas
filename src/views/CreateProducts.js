@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { View, Picker, Alert, ToastAndroid, StatusBar } from "react-native";
 import { Button, Input, Avatar } from "react-native-elements";
+import { TextInputMask } from "react-native-masked-text";
 import validator from "validator";
 import { categories, categoriesPhotos } from "../Constants";
 import { Products, Auth } from "../firebase";
@@ -33,7 +34,7 @@ class CreateProducts extends PureComponent {
               value={name}
               autoCapitalize="words"
             />
-            <Input
+            {/* <Input
               label="Precio"
               placeholder="L. 130.00"
               onChangeText={text => {
@@ -42,6 +43,26 @@ class CreateProducts extends PureComponent {
               }}
               value={price}
               keyboardType="number-pad"
+            /> */}
+            <TextInputMask
+              type="money"
+              customTextInput={Input}
+              customTextInputProps={{
+                placeholder: "L. 130.00",
+                label: "Precio",
+                keyboardType: "number-pad",
+              }}
+              options={{
+                precision: 2,
+                separator: ".",
+                delimiter: ",",
+                unit: "L. ",
+                suffixUnit: "",
+              }}
+              value={price}
+              onChangeText={text => {
+                this.setState({ price: text });
+              }}
             />
             <Picker
               selectedValue={categorie}
@@ -64,7 +85,11 @@ class CreateProducts extends PureComponent {
                 {
                   text: "OK",
                   onPress: () => {
-                    const product = { name, price: Number.parseFloat(price), categorie };
+                    const product = {
+                      name,
+                      price: Number.parseFloat(price.replace("L. ", "")),
+                      categorie,
+                    };
                     if (!validator.isEmpty(product.name) && Auth.currentUser !== null) {
                       Products(Auth.currentUser.uid)
                         .add(product)

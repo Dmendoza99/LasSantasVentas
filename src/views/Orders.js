@@ -43,7 +43,9 @@ class Orders extends PureComponent {
       OrdersDB(Auth.currentUser.uid).on("value", data => {
         const all = data.toJSON();
         const orders = [];
-        Object.keys(all).map(key => orders.push({ ...all[key], key }));
+        if(all){
+          Object.keys(all).map(key => orders.push({ ...all[key], key }));
+        }
         this.setState(state => ({
           orders,
           filterredOrders: orders.filter(order =>
@@ -175,7 +177,7 @@ class Orders extends PureComponent {
           />
         ) : (
           <View>
-            {orders.length <= 0 ? (
+            {orders.length > 0 ? (
               <View>
                 <Text h3 style={centeredText}>
                   Los datos estan cargando...

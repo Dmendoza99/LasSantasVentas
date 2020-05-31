@@ -15,6 +15,7 @@ import { theme, categoriesPhotos } from "../Constants";
 import { Products, Orders, Auth } from "../firebase";
 
 const styles = StyleSheet.create({
+  centeredText: { textAlign: "center" },
   ParallelButtonContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -90,7 +91,7 @@ class Sale extends PureComponent {
       descuento,
       query,
     } = this.state;
-    const { ParallelButtonContainer, ButtonContainer, flatlistContainer } = styles;
+    const { ParallelButtonContainer, ButtonContainer, flatlistContainer, centeredText } = styles;
     const { navigation } = this.props;
 
     return (
@@ -98,6 +99,7 @@ class Sale extends PureComponent {
         <Input
           placeholder="Busqueda"
           value={query}
+          disabled={products.length <= 0}
           rightIcon={
             query.length === 0
               ? {
@@ -216,10 +218,20 @@ class Sale extends PureComponent {
             />
           ) : (
             <View>
-              <Text h3 style={{ textAlign: "center" }}>
-                Los datos estan cargando...
-              </Text>
-              <ActivityIndicator size={60} color={theme.colors.secondary} />
+              {products.length > 0 ? (
+                <View>
+                  <Text h3 style={centeredText}>
+                    Los datos estan cargando...
+                  </Text>
+                  <ActivityIndicator size={60} color={theme.colors.secondary} />
+                </View>
+              ) : (
+                <View>
+                  <Text h3 style={centeredText}>
+                    Parece que no hay productos
+                  </Text>
+                </View>
+              )}
             </View>
           )}
         </View>
@@ -365,6 +377,7 @@ class Sale extends PureComponent {
           />
           <Button
             title="OK"
+            disabled={products.length <= 0}
             containerStyle={ButtonContainer}
             onPress={() => {
               this.setState({ showComment: true });

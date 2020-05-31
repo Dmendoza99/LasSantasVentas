@@ -7,10 +7,22 @@ import {
   ActivityIndicator,
   Picker,
   StatusBar,
+  StyleSheet,
 } from "react-native";
 import { ListItem, Avatar, Icon, Text, Overlay, Input, Button } from "react-native-elements";
 import { theme, categories, categoriesPhotos } from "../Constants";
 import { Products, Auth } from "../firebase";
+
+const styles = StyleSheet.create({
+  centeredText: { textAlign: "center" },
+  zeroPadding: { padding: 0, height: "auto", flex: 1 },
+  containerBottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  fullSize: { flex: 1 },
+});
 
 class ListProducts extends PureComponent {
   constructor(props) {
@@ -46,12 +58,14 @@ class ListProducts extends PureComponent {
 
   render() {
     const { products, showEdit, price, name, categorie, id, query } = this.state;
+    const { centeredText } = styles;
     const sourceEdit = categoriesPhotos[categorie];
 
     return (
       <View style={{ flex: 1, padding: 5, paddingTop: StatusBar.currentHeight + 5 }}>
         <Input
           placeholder="Busqueda"
+          disabled={products.length <= 0}
           value={query}
           rightIcon={
             query.length === 0
@@ -180,10 +194,20 @@ class ListProducts extends PureComponent {
           />
         ) : (
           <View>
-            <Text h3 style={{ textAlign: "center" }}>
-              Los datos estan cargando...
-            </Text>
-            <ActivityIndicator size={60} color={theme.colors.secondary} />
+            {products.length > 0 ? (
+              <View>
+                <Text h3 style={centeredText}>
+                  Los datos estan cargando...
+                </Text>
+                <ActivityIndicator size={60} color={theme.colors.secondary} />
+              </View>
+            ) : (
+              <View>
+                <Text h3 style={centeredText}>
+                  Parece que no hay productos
+                </Text>
+              </View>
+            )}
           </View>
         )}
         <Overlay

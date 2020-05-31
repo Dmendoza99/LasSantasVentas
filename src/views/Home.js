@@ -24,7 +24,9 @@ class Home extends PureComponent {
     if (Auth.currentUser !== null) {
       Orders(Auth.currentUser.uid).once("value", data => {
         const aux = data.exportVal();
-        this.setState({ orders: Object.values(aux) });
+        if(aux !== null){
+          this.setState({ orders: Object.values(aux) });
+        }
       });
     }
   };
@@ -47,7 +49,7 @@ class Home extends PureComponent {
     const { orders } = this.state;
     const reportMonths = {};
     const d = new Date();
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 1; i <= 4; i += 1) {
       reportMonths[`${months[d.getMonth()]}/${d.getFullYear().toString()}`] = 0;
       d.setMonth(d.getMonth() - 1);
     }
